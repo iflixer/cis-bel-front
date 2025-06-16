@@ -1,0 +1,682 @@
+<template>
+  <div class="main__content">
+
+    <el-dialog
+      title="Удаление кошелька"
+      :visible.sync="centDeletForm"
+      width="30%">
+      <span>Вы уверены что хотите удалить данные о кошельке ?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centDeletForm = false">Отмена</el-button>
+        <el-button type="primary" @click="deleteCent()">Удалить</el-button>
+      </span>
+    </el-dialog>
+
+
+    <el-dialog
+      title="Операции кошелька"
+      :visible.sync="centOperationForm" 
+      width="500px">
+      <div>
+        <el-table
+          :data="userInfo.operation"
+          style="width: 100%">
+
+          <el-table-column
+            prop="created_at"
+            label="Дата"
+            width="180">
+
+          </el-table-column>
+
+          <el-table-column
+            prop="status"
+            label="Статус"
+            width="180">
+            <template slot-scope="scope">
+              <div v-if="scope.row.status == 0" class="tag tag-color--red">Отклонена</div>
+              <div v-if="scope.row.status == 1" class="tag tag-color--yellow">Рассмотрение</div>
+              <div v-if="scope.row.status == 2" class="tag">Выполнена</div>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            prop="summ"
+            label="Сумма">
+
+          </el-table-column>
+
+        </el-table>
+      </div>
+    </el-dialog>
+
+
+    <tiket-cent-modal :visible.sync="centOutForm" :data="{ summ: score, cent: centData }" @close="centOutForm = false; getUserInfo()"></tiket-cent-modal>
+
+    <div class="content-site">
+      <slot name="menu"></slot>
+      <div>
+        <slot name="header"></slot>
+        <main>
+          <div class="main">
+
+            <slot name="messages"></slot>
+
+            <section class="section">
+              <div>
+                <h2 class="section__title">{{ title }}</h2>
+              </div>
+
+              <el-row :gutter="20">
+
+                <el-col :xl="12" :lg="12" :md="12">
+                  <div class="section__content">
+
+                    <h2 class="login">{{ userInfo.login }}</h2>
+                    <div class="login__post">{{ userAuth.name }}</div>
+
+                    <h3 class="cabinet__title-rang">Смена пароля</h3>
+                    <form v-on:submit.prevent="checkForm" action="" method="post" class="">
+
+                      <div class="form__element-form">
+                        <el-input
+                          class="form__input"
+                          name="oldPassword" 
+                          id="oldPassword" 
+                          type="password" 
+                          placeholder="Старый пароль"
+                          v-model="oldPassword"
+                          clearable>
+                        </el-input>
+                      </div>
+                      <div class="form__element-form">
+                        <el-input
+                          id="newPassword" 
+                          type="password" 
+                          class="form__input" 
+                          name="newPassword" 
+                          placeholder="Новый пароль"
+                          v-model="newPassword"
+                          clearable>
+                        </el-input>
+                      </div>
+                      <div class="form__element-form">
+                        <el-input
+                          id="password-confirm" 
+                          type="password" 
+                          class="form__input" 
+                          name="passwordConfirmation" 
+                          placeholder="Повторите пароль" 
+                          v-model="passwordConfirmation"
+                          clearable>
+                        </el-input>
+                      </div>
+
+                      <button class="form__button">Сохранить</button>
+                    </form>
+
+
+                  </div>
+                </el-col>
+
+                <el-col :xl="12" :lg="12" :md="12">
+                  <div class="section__content">
+
+                    <h3 class="cabinet__title-rang">API Токен</h3>
+                    <div class="form__element-form">
+                      <el-input
+                        type="text" 
+                        class="form__input" 
+                        disabled
+                        :value="userInfo.api_key"
+                        clearable>
+                      </el-input>
+                    </div>
+
+                    <!-- <div class="form__element-form">
+                      <label class="form__label" for="">
+                        Домен для iframe ссылок
+                        <el-popover
+                          placement="bottom"
+                          width="200"
+                          trigger="click"
+                          content="Этот домен будет подставлен во все ссылки iframe, в том числе и отдаваемые через наше api">
+                          <i slot="reference" class="el-icon-warning-outline icon-hover"></i>
+                        </el-popover>
+                      </label>
+
+                      <el-select class="form__input" style="margin-bottom:10px" @change="selectDomain" :value="userInfo.domain_id">
+                        <el-option label="test.riveras.nl" value="0"></el-option>
+                        <el-option v-for="item in listIdDomains" :key="item.id" :label="item.name" :value="item.id+''"></el-option>
+                      </el-select>
+
+                      <el-alert
+                        title='Прежде чем изменять эту настройку, внесите изменнения в запись DNS своего домена для переадресации запросов'
+                        type="warning"
+                        show-icon
+                        :closable="false"
+                        class="warning system-messages__item">
+                        <template slot="title">
+                          Прежде чем изменять эту настройку, внесите изменнения в запись <strong>DNS</strong> своего домена для переадресации запросов
+                        </template>
+                      </el-alert>
+                    </div> -->
+
+                  </div>
+                </el-col>
+
+                <el-col :xl="12" :lg="12" :md="12">
+                  <div class="section__content">
+
+                    <el-row :gutter="20" style="display:flex;align-items:center">
+                      <el-col :span="8">
+                        <h3 class="cabinet__title-rang">Баланс</h3>
+                        <p>{{ score }} ₽</p>
+                      </el-col>
+                      <el-col :span="8">
+                        <button class="form__button" @click="centOutForm = true">Вывести</button>
+                      </el-col>
+                      <el-col :span="8">
+                        <button class="form__button" @click="centOperationForm = true">Операции</button>
+                      </el-col>
+                    </el-row>
+
+                    <!-- <h3 class="cabinet__title-rang" style="padding-top:40px">Кошельки</h3>
+                    <div class="cent-block">
+                      <p class="cabinet__text-rang">Банковская карта</p>
+                      <div class="cent-block__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="47" height="47" class="pull-left"><defs id="defs10308"><linearGradient id="linearGradient10277" spreadMethod="pad" gradientTransform="scale(89.728 -89.728) rotate(-20.218 .966 -.457)" gradientUnits="userSpaceOnUse" y2="0" x2="1" y1="0" x1="0"><stop id="stop10279" offset="0" stop-opacity="1" stop-color="#222357"></stop><stop id="stop10281" offset="1" stop-opacity="1" stop-color="#254aa5"></stop></linearGradient><clipPath id="clipPath10271" clipPathUnits="userSpaceOnUse"><path id="path10273" d="M413.742 90.435c-.057-4.494 4.005-7.002 7.065-8.493 3.144-1.53 4.2-2.511 4.188-3.879-.024-2.094-2.508-3.018-4.833-3.054-4.056-.063-6.414 1.095-8.289 1.971l-1.461-6.837c1.881-.867 5.364-1.623 8.976-1.656 8.478 0 14.025 4.185 14.055 10.674.033 8.235-11.391 8.691-11.313 12.372.027 1.116 1.092 2.307 3.426 2.61 1.155.153 4.344.27 7.959-1.395l1.419 6.615c-1.944.708-4.443 1.386-7.554 1.386-7.98 0-13.593-4.242-13.638-10.314m34.827 9.744c-1.548 0-2.853-.903-3.435-2.289l-12.111-28.917h8.472l1.686 4.659h10.353l.978-4.659h7.467l-6.516 31.206h-6.894m1.185-8.43l2.445-11.718h-6.696l4.251 11.718m-46.284 8.43l-6.678-31.206h8.073l6.675 31.206h-8.07m-11.943 0l-8.403-21.24-3.399 18.06c-.399 2.016-1.974 3.18-3.723 3.18h-13.737l-.192-.906c2.82-.612 6.024-1.599 7.965-2.655 1.188-.645 1.527-1.209 1.917-2.742l6.438-24.903h8.532l13.08 31.206h-8.478"></path></clipPath></defs><g transform="matrix(.09246 0 0 .09246 -30.47 -49.692)" id="layer1"><g id="g10267" transform="matrix(4.98469 0 0 -4.98469 -1470.119 1039.626)"><g clip-path="url(#clipPath10271)" id="g10269"><g transform="translate(351.611 96.896)" id="g10275"><path id="path10283" d="M0 0l98.437 36.252 22.394-60.809-98.436-36.252" fill="url(#linearGradient10277)" fill-opacity="1" fill-rule="nonzero" stroke="none"></path></g></g></g></g><path id="rect5655" fill="none" d="M10.135 101.588h146.8v120.41h-146.8z"></path><g id="g5753" transform="translate(0 .073)"><g transform="translate(-3.077 10.497) scale(.36207)" id="_Group_" data-name="<Group>"><path id="rect5659" fill="#ff5f00" d="M57.65 22.85h31.5v56.61h-31.5z"></path><path id="_Path_" data-name="<Path>" d="M59.65 51.16A35.94 35.94 0 0173.4 22.85a36 36 0 100 56.61 35.94 35.94 0 01-13.75-28.3z" fill="#eb001b"></path><path d="M131.65 51.16a36 36 0 01-58.25 28.3 36 36 0 000-56.61 36 36 0 0158.25 28.3z" id="path5662" fill="#f79e1b"></path></g><path d="M11.123 46.834V44.84a1.183 1.183 0 00-1.249-1.262 1.23 1.23 0 00-1.116.565 1.166 1.166 0 00-1.05-.565 1.05 1.05 0 00-.931.472v-.393h-.691v3.177h.698v-1.748a.744.744 0 01.777-.844c.459 0 .691.3.691.838v1.768h.698v-1.762a.748.748 0 01.778-.844c.472 0 .698.3.698.838v1.768zm10.325-3.177h-1.136v-.963h-.698v.963h-.632v.632h.645v1.462c0 .738.286 1.176 1.103 1.176.306.001.605-.084.864-.246l-.2-.591c-.184.11-.395.172-.61.18-.333 0-.46-.213-.46-.532v-1.45h1.13zm5.895-.08a.937.937 0 00-.837.466v-.386h-.685v3.177h.691v-1.78c0-.526.226-.818.665-.818.148-.002.295.025.432.08l.213-.665a1.479 1.479 0 00-.492-.087zm-8.912.333a2.376 2.376 0 00-1.296-.332c-.804 0-1.33.385-1.33 1.017 0 .518.386.837 1.097.937l.332.046c.38.053.559.153.559.332 0 .246-.253.386-.725.386a1.691 1.691 0 01-1.056-.332l-.333.538c.403.281.885.425 1.376.412.917 0 1.449-.432 1.449-1.037s-.419-.85-1.11-.95l-.332-.047c-.3-.04-.539-.1-.539-.312 0-.213.226-.372.605-.372.35.004.694.098.997.272zm18.512-.332a.937.937 0 00-.837.465v-.386h-.685v3.177h.691v-1.78c0-.526.226-.818.665-.818.148-.002.295.025.432.08l.213-.665a1.479 1.479 0 00-.492-.087zm-8.905 1.661a1.605 1.605 0 001.694 1.662c.415.02.823-.114 1.143-.38l-.332-.557c-.239.182-.53.282-.83.285-1.251-.1-1.251-1.932 0-2.033.3.003.591.103.83.285l.332-.558c-.32-.265-.728-.4-1.143-.379a1.605 1.605 0 00-1.694 1.662zm6.473 0v-1.582h-.691v.386a1.206 1.206 0 00-.997-.465c-2.216 0-2.216 3.323 0 3.323.387.014.758-.16.997-.466v.386h.69zm-2.572 0c.05-.84 1.077-1.214 1.655-.604.579.61.15 1.617-.692 1.621a.954.954 0 01-.963-1.017zm-8.341-1.661c-2.215.03-2.169 3.354.047 3.323a1.93 1.93 0 001.319-.432l-.333-.512c-.262.21-.587.327-.923.332a.88.88 0 01-.95-.777h2.359v-.266c0-.997-.618-1.662-1.509-1.662zm0 .618a.788.788 0 01.804.77h-1.661a.817.817 0 01.844-.77zm17.316 1.05V42.38h-.664v1.662a1.206 1.206 0 00-.997-.465c-2.216 0-2.216 3.323 0 3.323.387.014.758-.16.997-.466v.386h.664zm-2.555 0c.05-.84 1.077-1.214 1.655-.604.579.61.15 1.616-.692 1.62a.954.954 0 01-.963-1.016zm-23.338 0v-1.589h-.69v.386a1.206 1.206 0 00-.998-.465c-2.215 0-2.215 3.323 0 3.323.388.014.76-.16.997-.466v.386h.691zm-2.572 0c.05-.84 1.078-1.214 1.656-.604.578.61.149 1.616-.692 1.62a.954.954 0 01-.97-1.016z" id="path5657" fill="#231f20" stroke-width=".332"></path></g></svg>
+                      </div>
+                      <div class="cent-block__content">
+                        <input v-if="centDataFlag.card || centData.card == null" class="cabinet__input" type="text" v-model="centData.card" @focus="upDateCent('card')">
+                        <div v-else>
+                          <p class="cent-data">{{ centData.card }}</p>
+                          <span class="cent__button" @click="upDateCent('card')">Изменить</span>
+                          <span class="cent__button" @click="deleteCentForm('card')">Удалить</span>
+                        </div>
+                      </div>
+                    </div> -->
+
+                    <!-- <br>
+                    <p class="cabinet__text-rang">Кошелек WebMoney</p>
+                    <div class="cent-block" style="display:flex;align-items:center">
+                        <div class="cent-block__icon" style="display:flex;justify-content:center">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="47" height="47" class="pull-left"><path d="M23.388.428c3.657 0 7.135.837 10.256 2.334.49.22.982.486 1.47.75L32.975 5.41l-3.209-3.308-5.528 4.849-3.256-3.482-10.167 9.037 6.51 7.097-2.541 2.201 6.421 7.097-2.541 2.204 9.187 10.094 5.437-4.938 4.729 5.292c-.937.705-1.963 1.412-3.076 2.027a23.49 23.49 0 01-11.507 2.995C10.548 46.575.07 36.22.07 23.481.026 10.831 10.504.425 23.39.425zm-4.281 21.641l5.576-4.938 4.993 5.512-5.576 4.935-4.993-5.51zm3.968 9.522l5.532-4.982 5.037 5.511-5.575 4.939-4.993-5.468zm-7.934-18.91l5.572-4.937 4.996 5.51-5.575 4.938zm10.21-2.644l4.146-3.703 3.746 4.098-4.149 3.747-3.745-4.142zm7.401 16.97l4.145-3.703 3.747 4.143-4.148 3.704-3.745-4.145zm3.656 8.331l4.147-3.703 3.744 4.098-4.146 3.747zm1.694-19.045l2.766-2.466 2.496 2.733-2.764 2.468-2.5-2.735zM34.535 8.14l2.766-2.512L39.8 8.406l-2.766 2.47-2.496-2.735zm7.092 16.312l2.763-2.47 2.54 2.733-2.809 2.468-2.495-2.731zm-12.44-6.13l4.146-3.701 3.745 4.098-4.145 3.703-3.746-4.098z" fill="#006cb4"></path></svg>
+                        </div>
+                        <div class="cent-block__content">
+                          <div v-if="centDataFlag.webMoney || centData.webMoney == null" style="display:flex;align-items:center">
+                            <el-input
+                              class="form__input cabinet__input"
+                              style="margin-left:10px;margin-right:20px;width:150%;"
+                              controls-position="right"
+                              v-model="centData.webMoney"
+                              @focus="upDateCent('webMoney')"
+                              clearable>
+                            </el-input>
+                            <button class="form__button" :disabled="!upDateCentFlag" @click="saveCent()">Сохранить</button>
+                          </div>
+                          <div v-else>
+                            <p class="cent-data">{{ centData.webMoney }}</p>
+                            <span class="cent__button" @click="upDateCent('webMoney')">Изменить</span>
+                            <span class="cent__button" @click="deleteCentForm('webMoney')">Удалить</span>
+                          </div>
+                        </div>
+                    </div> -->
+
+                    <br>
+                    <p class="cabinet__text-rang">Кошелек USDT TRC20</p>
+                    <div class="cent-block" style="display:flex;align-items:center">
+                        <div class="cent-block__icon" style="display:flex;justify-content:center;margin-top:-8px;margin-left:7px;height:70px;">
+                          <!-- <svg fill="none" viewBox="0 0 32 32" width="47" height="47" xmlns="http://www.w3.org/2000/svg"><path d="m16 32c8.8366 0 16-7.1634 16-16 0-8.83656-7.1634-16-16-16-8.83656 0-16 7.16344-16 16 0 8.8366 7.16344 16 16 16z" fill="#26a17b"/><path clip-rule="evenodd" d="m17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.658 0-.809 2.902-1.486 6.79-1.66v2.644c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.643c3.88.173 6.775.85 6.775 1.658 0 .81-2.895 1.485-6.775 1.657zm0-3.59v-2.366h5.414v-3.608h-14.741v3.608h5.414v2.365c-4.4.202-7.709 1.074-7.709 2.118s3.309 1.915 7.709 2.118v7.582h3.913v-7.584c4.393-.202 7.694-1.073 7.694-2.116s-3.301-1.914-7.694-2.117z" fill="#fff" fill-rule="evenodd"/></svg> -->
+                          <svg width="79" height="79" viewBox="0 0 1316 1713" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1316 0H0V1713H1316V0Z" fill="white"/>
+                            <path d="M1088.04 853.312C1088.04 1149.25 848.149 1389.13 552.215 1389.13C256.292 1389.13 16.3938 1149.25 16.3938 853.312C16.3938 557.384 256.292 317.492 552.215 317.492C848.149 317.492 1088.04 557.384 1088.04 853.312Z" fill="#1BA27A"/>
+                            <path d="M803.691 587.685H296.323V710.173H488.763V890.209H611.251V710.173H803.691V587.685Z" fill="white"/>
+                            <path d="M551.17 909.386C391.978 909.386 262.914 884.192 262.914 853.109C262.914 822.031 391.972 796.832 551.17 796.832C710.362 796.832 839.42 822.031 839.42 853.109C839.42 884.192 710.362 909.386 551.17 909.386ZM874.832 862.491C874.832 822.412 729.925 789.925 551.17 789.925C372.42 789.925 227.502 822.412 227.502 862.491C227.502 897.786 339.869 927.191 488.768 933.707V1192.15H611.246V933.809C761.292 927.497 874.832 897.968 874.832 862.491Z" fill="white"/>
+                            <ellipse cx="999" cy="871.5" rx="326" ry="326.5" fill="#FF060A"/>
+                            <path d="M1202.33 816.006C1183.27 798.376 1156.9 771.454 1135.42 752.36L1134.15 751.469C1132.04 749.769 1129.65 748.435 1127.1 747.523V747.523C1075.31 737.849 834.3 692.724 829.598 693.297C828.281 693.482 827.021 693.96 825.913 694.697L824.705 695.652C823.219 697.164 822.09 698.991 821.401 700.998L821.083 701.826V706.344V707.045C848.216 782.719 955.347 1030.62 976.443 1088.79C977.714 1092.74 980.128 1100.25 984.64 1100.63H985.656C988.071 1100.63 998.365 1087.01 998.365 1087.01C998.365 1087.01 1182.38 863.486 1201 839.682C1203.41 836.75 1205.54 833.596 1207.35 830.263C1207.82 827.655 1207.6 824.971 1206.72 822.472C1205.84 819.974 1204.33 817.746 1202.33 816.006V816.006ZM1045.58 842.037L1124.11 776.8L1170.18 819.316L1045.58 842.037ZM1015.08 837.773L879.86 726.775L1098.63 767.19L1015.08 837.773ZM1027.28 866.859L1165.67 844.52L1007.45 1035.46L1027.28 866.859ZM861.496 737.849L1003.77 858.776L983.178 1035.58L861.496 737.849Z" fill="white"/>
+                          </svg>
+                        </div>
+                        <div class="cent-block__content">
+                          <div v-if="centDataFlag.usdt_trc20 || centData.usdt_trc20 == null" style="display:flex;align-items:center">
+                            <el-input
+                              class="form__input cabinet__input"
+                              style="margin-left:10px;margin-right:20px;width:150%;"
+                              controls-position="right"
+                              v-model="centData.usdt_trc20"
+                              @focus="upDateCent('usdt_trc20')"
+                              clearable>
+                            </el-input>
+                            <button class="form__button" :disabled="!upDateCentFlag" @click="saveCent()">Сохранить</button>
+                          </div>
+                          <div v-else style="margin-left:10px">
+                            <p class="cent-data">{{ centData.usdt_trc20 }}</p>
+                            <span class="cent__button" @click="upDateCent('usdt_trc20')">Изменить</span>
+                            <span class="cent__button" @click="deleteCentForm('usdt_trc20')">Удалить</span>
+                          </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <p class="cabinet__text-rang">Кошелек USDT ERC20</p>
+                    <div class="cent-block" style="display:flex;align-items:center">
+                        <div class="cent-block__icon" style="display:flex;justify-content:center;margin-top:-8px;margin-left:7px;height:70px;">
+                          <!-- <svg fill="none" viewBox="0 0 32 32" width="47" height="47" xmlns="http://www.w3.org/2000/svg"><path d="m16 32c8.8366 0 16-7.1634 16-16 0-8.83656-7.1634-16-16-16-8.83656 0-16 7.16344-16 16 0 8.8366 7.16344 16 16 16z" fill="#26a17b"/><path clip-rule="evenodd" d="m17.922 17.383v-.002c-.11.008-.677.042-1.942.042-1.01 0-1.721-.03-1.971-.042v.003c-3.888-.171-6.79-.848-6.79-1.658 0-.809 2.902-1.486 6.79-1.66v2.644c.254.018.982.061 1.988.061 1.207 0 1.812-.05 1.925-.06v-2.643c3.88.173 6.775.85 6.775 1.658 0 .81-2.895 1.485-6.775 1.657zm0-3.59v-2.366h5.414v-3.608h-14.741v3.608h5.414v2.365c-4.4.202-7.709 1.074-7.709 2.118s3.309 1.915 7.709 2.118v7.582h3.913v-7.584c4.393-.202 7.694-1.073 7.694-2.116s-3.301-1.914-7.694-2.117z" fill="#fff" fill-rule="evenodd"/></svg> -->
+                          <svg width="79" height="79" viewBox="0 0 1316 1713" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1316 0H0V1713H1316V0Z" fill="white"/>
+                            <path d="M1088.04 853.312C1088.04 1149.25 848.149 1389.13 552.215 1389.13C256.292 1389.13 16.3938 1149.25 16.3938 853.312C16.3938 557.384 256.292 317.492 552.215 317.492C848.149 317.492 1088.04 557.384 1088.04 853.312Z" fill="#1BA27A"/>
+                            <path d="M803.691 587.685H296.323V710.173H488.763V890.209H611.251V710.173H803.691V587.685Z" fill="white"/>
+                            <path d="M551.17 909.386C391.978 909.386 262.914 884.192 262.914 853.109C262.914 822.031 391.972 796.832 551.17 796.832C710.362 796.832 839.42 822.031 839.42 853.109C839.42 884.192 710.362 909.386 551.17 909.386ZM874.832 862.491C874.832 822.412 729.925 789.925 551.17 789.925C372.42 789.925 227.502 822.412 227.502 862.491C227.502 897.786 339.869 927.191 488.768 933.707V1192.15H611.246V933.809C761.292 927.497 874.832 897.968 874.832 862.491Z" fill="white"/>
+                          </svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 32 32" style="position:absolute;margin:26px 0 0 31px;"><g fill="none" fill-rule="evenodd"><circle cx="16" cy="16" r="16" fill="#627EEA"/><g fill="#FFF" fill-rule="nonzero"><path fill-opacity=".602" d="M16.498 4v8.87l7.497 3.35z"/><path d="M16.498 4L9 16.22l7.498-3.35z"/><path fill-opacity=".602" d="M16.498 21.968v6.027L24 17.616z"/><path d="M16.498 27.995v-6.028L9 17.616z"/><path fill-opacity=".2" d="M16.498 20.573l7.497-4.353-7.497-3.348z"/><path fill-opacity=".602" d="M9 16.22l7.498 4.353v-7.701z"/></g></g></svg>
+                        </div>
+                        <div class="cent-block__content">
+                          <div v-if="centDataFlag.usdt_erc20 || centData.usdt_erc20 == null" style="display:flex;align-items:center">
+                            <el-input
+                              class="form__input cabinet__input"
+                              style="margin-left:10px;margin-right:20px;width:150%;"
+                              controls-position="right"
+                              v-model="centData.usdt_erc20"
+                              @focus="upDateCent('usdt_erc20')"
+                              clearable>
+                            </el-input>
+                            <button class="form__button" :disabled="!upDateCentFlag" @click="saveCent()">Сохранить</button>
+                          </div>
+                          <div v-else style="margin-left:10px">
+                            <p class="cent-data">{{ centData.usdt_erc20 }}</p>
+                            <span class="cent__button" @click="upDateCent('usdt_erc20')">Изменить</span>
+                            <span class="cent__button" @click="deleteCentForm('usdt_erc20')">Удалить</span>
+                          </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="cent-block">
+                      <p class="cabinet__text-rang">Кошелек Qiwi</p>
+                      <div class="cent-block__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="47" height="47" class="pull-left"><path d="M36.87 29.57c.788.302 1.091 1.482 1.151 1.997.122.939-.15 1.302-.453 1.302-.303 0-.727-.363-1.18-1.09-.455-.727-.637-1.544-.394-1.968.15-.273.483-.393.878-.242zm-4.6 3.42c.484 0 1.03.212 1.514.635.938.788 1.21 1.696.726 2.362-.273.333-.726.545-1.241.545-.515 0-1.06-.182-1.423-.515-.847-.726-1.09-1.938-.545-2.603.212-.273.545-.424.969-.424zM21.675 41.74C10.171 41.739.848 32.414.848 20.91S10.172.085 21.674.085c11.504 0 20.828 9.324 20.828 20.826 0 3.905-1.09 7.569-2.936 10.687-.06.09-.212.06-.242-.061-.727-5.116-3.845-7.932-8.386-8.779-.394-.061-.454-.303.06-.363 1.393-.122 3.36-.091 4.39.09.06-.514.091-1.06.091-1.604 0-7.599-6.176-13.775-13.774-13.775-7.598 0-13.774 6.176-13.774 13.775s6.176 13.775 13.774 13.775h.636a18.582 18.582 0 01-.273-3.724c.03-.848.212-.97.576-.303 1.907 3.3 4.631 6.266 9.959 7.447 4.359.969 8.718 2.088 13.41 8.052.424.514-.211 1.06-.696.636-4.783-4.239-9.142-5.631-13.107-5.631-4.45.03-7.478.606-10.536.606z" fill="#ff8c00"></path></svg>
+                      </div>
+                      <div class="cent-block__content">
+                        <input v-if="centDataFlag.qiwi || centData.qiwi == null" class="cabinet__input" type="text" v-model="centData.qiwi" @focus="upDateCent('qiwi')">
+                        <div v-else>
+                          <p class="cent-data">{{ centData.qiwi }}</p>
+                          <span class="cent__button" @click="upDateCent('qiwi')">Изменить</span>
+                          <span class="cent__button" @click="deleteCentForm('qiwi')">Удалить</span>
+                        </div>
+                      </div>
+                    </div> -->
+
+                    <!-- <div class="cent-block">
+                      <p class="cabinet__text-rang">Кошелек Яндекс.Деньги</p>
+                      <div class="cent-block__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="47" height="47" class="pull-left"><path d="M10.696 14.93C15.45 11.554 30.69.024 31.326.024v18.78H42.28v28.17H8.34c-1.992 0-3.62-1.55-3.62-3.443V23.315c0-2.637.233-4.31 5.975-8.386z" fill="#f9c637" fill-rule="evenodd" stroke-width="1.174"></path><path d="M31.325 18.805v10.496L10.98 42.28l25.04-7.839V18.805h-5.235" fill="#c8a332" fill-rule="evenodd" stroke-width="1.174"></path><path d="M21.57 17.737c1.35-1.504 3.319-2.035 4.4-1.185 1.082.85.866 2.759-.483 4.264C24.14 22.32 22.17 22.85 21.088 22c-1.082-.85-.865-2.758.482-4.263" fill="#000106" fill-rule="evenodd" stroke-width="1.174"></path></svg>
+                      </div>
+                      <div class="cent-block__content">
+                        <input v-if="centDataFlag.yandex || centData.yandex == null" class="cabinet__input" type="text" v-model="centData.yandex" @focus="upDateCent('yandex')">
+                        <div v-else>
+                          <p class="cent-data">{{ centData.yandex }}</p>
+                          <span class="cent__button" @click="upDateCent('yandex')">Изменить</span>
+                          <span class="cent__button" @click="deleteCentForm('yandex')">Удалить</span>
+                        </div>
+                      </div>
+                    </div> -->
+
+                  </div>
+                </el-col>
+
+                <el-col :xl="12" :lg="12" :md="12">
+                  <div class="section__content">
+
+                    <h3 class="cabinet__title-rang">Мои Домены и Телеграм каналы</h3><br>
+
+                    <!-- <p class="cabinet__text-rang">
+                      Вставте в корень сайта фаил<br>
+                      <b>{{ userInfo.api_key }}.txt</b>
+                    </p> -->
+                    <!-- <p class="cabinet__text-rang">
+                      Домен следует вводить без 
+                      <b>http://</b>, 
+                      <b>https://</b>, 
+                      <b>//</b>, 
+                      <b>www</b> и без 
+                      <b>/</b> на конце. <br>
+                      Например: <b>site.ru</b>
+                    </p> -->
+
+                    <el-alert
+                      :title="`Для добавления Домена, создайте в корне сайта файл ${userInfo.api_key}.txt`"
+                      type="info"
+                      show-icon
+                      :closable="false"
+                      class="info system-messages__item">
+                      <template slot="title">
+                        Для добавления Домена, создайте в корне сайта файл <strong>{{ userInfo.api_key }}.txt</strong>
+                      </template>
+                    </el-alert>
+
+                    <!-- <el-alert
+                      title='Домен следует вводить без: "http://", "https://", "//", "www" и без "/" на конце. Например: "site.ru"'
+                      type="warning"
+                      show-icon
+                      :closable="false"
+                      class="warning system-messages__item">
+                    </el-alert> -->
+
+
+                    <el-row :gutter="20">
+                      <el-col :span="16">
+                        <div class="">
+                          <el-input
+                            class="form__input"
+                            controls-position="right"
+                            placeholder="example.com / @mychannel"
+                            v-model="domain"
+                            clearable>
+                          </el-input>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <button class="form__button" v-on:click="addDomain()">Добавить</button>
+                      </el-col>
+                    </el-row>
+
+                    <el-table
+                      :data="listDomains"
+                      stripe
+                      style="width: 100%">
+                      <el-table-column
+                        prop="name"
+                        label="Домен / Канал">
+                      </el-table-column>
+                      <el-table-column
+                        align="right">
+                        <template slot="header">
+                          Одобрение 
+                          <el-popover
+                            placement="bottom"
+                            width="200"
+                            trigger="click"
+                            content="Статус Домена или Телеграм канала, определяемый администратором. Если Домен или Телеграм канал не принят, операции с ним запрещены.">
+                            <i slot="reference" class="el-icon-warning-outline icon-hover"></i>
+                          </el-popover>
+                        </template>
+                        <template slot-scope="scope">
+                          <span v-if="scope.row.status == 2" class="status-domain--red status-domain"></span>
+                          <span v-if="scope.row.status == 1" class="status-domain--green status-domain"></span>
+                          <span v-if="scope.row.status == 0" class="status-domain--yellow status-domain"></span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        width="45">
+                        <template slot-scope="scope">
+                          <a href="#" v-on:click.prevent="deleteDomain(scope.row.id, scope.$index)"><i class="cabinet__icons-btn fa fa-times" aria-hidden="true"></i></a>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+
+                  </div>
+                </el-col>
+              </el-row>
+
+            </section>
+
+          </div>
+        </main>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script>
+
+  import TiketCentModal from '~/components/TiketsPage/TiketCentModal';
+
+  export default {
+    name: 'CabinetPanel',
+    components: {
+      TiketCentModal
+    },
+    data: () => ({
+
+      arr: [
+        'test', 
+        'test2', 
+        'test3'
+      ],
+
+      oldPassword: '',
+      newPassword: '',
+      passwordConfirmation: '',
+      errorForm: '',
+
+      domain: '',
+
+      userInfo: {},
+      listDomains: [],
+
+      centData: {
+        yandex: null,
+        qiwi: null,
+        card: null,
+        webMoney: null,
+        usdt_trc20: null,
+        usdt_erc20: null
+      },
+
+      centDataFlag: {
+        yandex: false,
+        qiwi: false,
+        card: false,
+        webMoney: false,
+        usdt_trc20: false,
+        usdt_erc20: false
+      },
+
+      upDateCentFlag: false,
+      centDeletForm: false,
+      centDeleteType: null,
+
+      centOutForm: false,
+      centOperationForm: false
+    }),
+
+    async created() {
+      console.log(this.userAuth);
+
+      await this.getUserInfo();
+      await this.getListDomains();
+    },
+
+    computed:{
+      userAuth(){ return this.$store.state.user; },
+      title(){ return this.$router.currentRoute.meta.title},
+      score(){ return Number(this.userInfo.score).toFixed(2);},
+      listIdDomains(){ return this.listDomains.filter(item => item.status == '1'); }
+    },
+
+    methods: {
+
+      async getUserInfo(){
+        await this.postMethod('users.info').then(response => {
+          this.userInfo = response;
+          this.centData = JSON.parse(response.cent);
+          // console.log(response);
+        });
+      },
+
+      async getListDomains(){
+        await this.postMethod('domains.get').then(response => {
+          this.listDomains = response.map(item => ({ id: item.id, id_parent: item.id_parent, name: item.name, show: item.show, status: item.status }));
+          console.log(response);
+        });
+      },
+
+
+      saveCent(){
+
+        for (let key in this.centData) {
+          if(this.centData[key] == '') this.centData[key] = null;
+        }
+
+        this.postMethod('users.putCent', {
+          cent: JSON.stringify(this.centData)
+        }).then((response) => {
+          console.log(response);
+        });
+
+        console.log(JSON.stringify(this.centData));
+
+        this.centDataFlag = {
+          yandex: false,
+          qiwi: false,
+          card: false,
+          webMoney: false,
+          usdt_trc20: false,
+          usdt_erc20: false
+        };
+        this.upDateCentFlag = false;
+      },
+      upDateCent(type = ''){
+        if(type != '') this.centDataFlag[type] = true;
+        this.upDateCentFlag = true;
+      },
+      deleteCent(){
+        if(this.centDeleteType != null) this.centData[this.centDeleteType] = null;
+        this.centDeletForm = false;
+        this.saveCent();
+      },
+      deleteCentForm(type){
+        this.centDeleteType = type;
+        this.centDeletForm = true;
+      },
+
+
+      addDomain: function () {
+          
+        this.postMethod('domains.add', {
+          domain: this.domain
+        }).then((response) => {
+          if(response.status){
+            this.listDomains.push(response.data);
+            if(this.userAuth.status == "client"){
+              this.postMethod('tikets.add', {
+                tupe: 'domain',
+                title: 'Модерация домена '+ this.domain,
+                message: 'Проверка домена - '+ this.domain +' на право размещения плеера.',
+                data: JSON.stringify( {domain: this.domain, id: response.data.id} )
+              }).then((response) => {
+                // console.log(response);
+              });
+            }
+            this.domain = '';
+          }
+
+        });
+      },
+
+      selectDomain(id){
+        this.userInfo.domain_id = id;
+        this.postMethod('users.selectDomain', {id});
+      },
+
+      deleteDomain(id, index) {
+        this.postMethod('domains.delete', {id}).then(() => { this.listDomains.splice(index, 1); });
+      },
+
+
+      checkForm: function () {
+
+        if (this.oldPassword == '' && this.newPassword == '' && this.passwordConfirmation == '') { 
+          this.$notify.error({ title: 'Ошибка', message: 'Заполните все поля', customClass: 'messages-ui' });
+          return; 
+        }
+        if(this.newPassword.length < 8){ 
+          this.$notify.error({ title: 'Ошибка', message: 'Длинна пароля не менее 8 символов', customClass: 'messages-ui' });
+          return; 
+        }
+        if(this.newPassword == this.oldPassword){ 
+          this.$notify.error({ title: 'Ошибка', message: 'Новый пароль должен отличаться', customClass: 'messages-ui' });
+          return; 
+        }
+        if(this.passwordConfirmation != this.newPassword){ 
+          this.$notify.error({ title: 'Ошибка', message: 'Новые пароли не совпадают', customClass: 'messages-ui' });
+          return; 
+        }
+        
+
+        this.postMethod('users.putPasword', {
+          password: this.newPassword,
+          oldpassword: this.oldPassword
+        }).then(() => {
+          this.oldPassword = '';
+          this.newPassword = '';
+          this.passwordConfirmation = '';
+
+          this.$notify.success({ title: 'Успех', message: 'Пароль изменен', customClass: 'messages-ui' });
+        });
+
+        
+
+      }
+        
+    }
+  }
+</script>
+
+<style lang='scss' scoped>
+  .status-domain{
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    &--red{ background: crimson; }
+    &--green{ background: forestgreen; }
+    &--yellow{ background: gold; }
+  }
+
+
+
+  .login{
+    font-family: 'Montserrat-Bold';
+    color: #181f39;
+    font-size: 24px;
+  }
+  .login__post{
+    font-size: 13px;
+    color: #b1b1b1;
+    font-family: 'Montserrat-Regular';
+    padding-bottom: 30px;
+  }
+
+  .section__content{
+    min-height: 340px;
+  }
+  .cabinet__icons-btn{
+    font-size: 18px;
+  }
+  .cent-block{
+    overflow: hidden;
+    padding: 10px 0;
+  }
+  .cent-block__icon{
+    width: 70px;
+    float: left;
+  }
+  .cent-block__content{
+    width: calc(100% - 70px);
+    float: left;
+  }
+
+  .cent__button{
+    max-width: 100px;
+    font-size: 13px;
+    color: #2fb887;
+    font-family: 'Montserrat-Regular';
+    // padding: 0 0 0 12px;
+    cursor: pointer;
+  }
+
+
+  .el-table td, .el-table th {
+      padding: 6px 0;
+  }
+</style>

@@ -1,0 +1,133 @@
+
+
+  .section{
+    padding: 20px 0 50px 0;
+
+    &__content{
+      margin-top: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 0 1px #e1eaef;
+      padding: 30px;
+    }
+
+    &__title{
+      font-family: 'Montserrat-Bold';
+      color: #181f39;
+      font-size: 32px;
+      line-height: 50px;
+      // display: inline-block;
+    }
+
+    &__button-out{
+      max-width: 100px;
+      font-size: 13px;
+      color: #2fb887;
+      font-family: 'Montserrat-Regular';
+      // padding: 0 0 0 12px;
+      cursor: pointer;
+    }
+
+    &__title-buttons{
+      padding-top: 30px;
+      overflow: hidden;
+    }
+
+    &__title-button{
+      height:50px;
+      padding: 0 20px;
+      background: #38cf99;
+      border: 1px solid #38cf99;
+      border-radius: 4px;
+      color: #fff;
+      text-align: center;
+      line-height: 50px;
+      font-size: 15px;
+      font-family: 'Montserrat-Regular';
+      display: inline-block;
+      margin-left: 10px;
+      float: right;
+      cursor: pointer;
+
+      
+    }
+
+    
+
+    &__title-button-rever{
+      height:50px;
+      padding: 0 20px;
+      background: #fff;
+      border: 1px solid #e7e7e7;
+      border-radius: 4px;
+      color: #2fb887;
+      text-align: center;
+      line-height: 50px;
+      font-size: 15px;
+      font-family: 'Montserrat-Regular';
+      display: inline-block;
+      float: right;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    
+    
+    &__title-button-lin{
+      height: 35px;
+      color: #5eb395;
+      text-align: center;
+      line-height: 35px;
+      font-size: 18px;
+      font-family: 'Montserrat-Medium';
+      display: inline-block;
+      float: left;
+      margin-right: 50px;
+      cursor: pointer;
+      position: relative;
+      text-decoration: none;
+
+      &:before{
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 1px;
+        background: #5eb395;
+        bottom: 0;
+        left: 32px;
+      }
+
+      &.activ:before{
+        width: calc(100% - 32px);
+      }
+
+      i{
+        position: relative;
+        top: 3px;
+        margin-right: 8px;
+      }
+    }
+
+    .--rever{
+      float: left;
+      margin-left: 0;
+      margin-right: 10px;
+    }
+
+    &__title-button-rever i{
+      position: relative;
+      top: 2px;
+      font-size: 20px;
+    }
+    &__title-button i{
+      position: relative;
+      top: 2px;
+      font-size: 20px;
+    }
+    &__title-button:hover{
+      background: #31b687;
+    }
+
+    &__title-button .icon{
+      margin-right: 10px;
+    }
+  }
