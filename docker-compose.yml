@@ -8,7 +8,14 @@ services:
       target: production
     container_name: kolobok_frontend_app
     ports:
-      - "8080:80"
+      - "${APP_PORT:-8080}:80"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - API_BASE_URL=${API_BASE_URL}
+      - BUILD_OUTPUT_DIR=${BUILD_OUTPUT_DIR:-kholobok.biz}
+      - PUBLIC_PATH=${PUBLIC_PATH:-/}
+    env_file:
+      - .env
     networks:
       - kolobok-frontend-network
     restart: unless-stopped
@@ -19,13 +26,20 @@ services:
       target: development
     container_name: kolobok_frontend_dev
     ports:
-      - "8040:8040"
+      - "${DEV_PORT:-8040}:${DEV_PORT:-8040}"
     volumes:
       - .:/app
       - /app/node_modules
     environment:
-      - NODE_ENV=development
-      - DEV_HOST=0.0.0.0
+      - NODE_ENV=${NODE_ENV:-development}
+      - DEV_HOST=${DEV_HOST:-0.0.0.0}
+      - DEV_PORT=${DEV_PORT:-8040}
+      - API_BASE_URL=${API_BASE_URL}
+      - BUILD_OUTPUT_DIR=${BUILD_OUTPUT_DIR:-kholobok.biz}
+      - PUBLIC_PATH=${PUBLIC_PATH:-/}
+      - PUBLIC_PATH_DEV=${PUBLIC_PATH_DEV:-/kholobok-biz/}
+    env_file:
+      - .env
     networks:
       - kolobok-frontend-network
     restart: unless-stopped

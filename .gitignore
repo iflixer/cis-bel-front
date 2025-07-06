@@ -1,0 +1,9 @@
+node_modules/
+yarn.lock
+yarn-error.log
+kholobokBiz/
+kholobok.biz/
+.idea
+dist
+.node_modules_global/
+.env

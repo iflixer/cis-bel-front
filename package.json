@@ -6,7 +6,8 @@
     "main": "index.js",
     "scripts": {
         "dev_src": "webpack-dev-server --mode development",
-        "build_src": "rimraf kholobok.biz && webpack --mode production"
+        "build_src": "rimraf $BUILD_OUTPUT_DIR && webpack --mode production",
+        "build_src_win": "rimraf %BUILD_OUTPUT_DIR% && webpack --mode production"
     },
     "browserslist": [
         "> 1%",
@@ -69,6 +70,7 @@
         "babel-preset-vue-app": "^2.0.0",
         "cross-env": "^5.0.5",
         "crypto-js": "^3.1.9-1",
+        "dotenv": "^16.0.0",
         "css-loader": "^2.1.1",
         "cssnano": "^4.1.10",
         "exceljs": "^2.0.1",

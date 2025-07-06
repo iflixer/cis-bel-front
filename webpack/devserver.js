@@ -1,13 +1,18 @@
 const pathResolve = require('path').resolve;
 const url = require('url');
-const publicPath = '/kholobok-biz/';
+require('dotenv').config();
+
+const publicPath = process.env.PUBLIC_PATH_DEV || '/kholobok-biz/';
+const host = process.env.DEV_HOST || 'localhost';
+const port = parseInt(process.env.DEV_PORT) || 8040;
+const openBrowser = process.env.DEV_OPEN === 'true';
 
 module.exports = () => ({
   devServer: {
-    host: 'localhost',
+    host: host,
     disableHostCheck: true,
-    port: 8040,
-    open: true,
+    port: port,
+    open: openBrowser,
     historyApiFallback: {
       index: url.parse(publicPath).pathname,
     },

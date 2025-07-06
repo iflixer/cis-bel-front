@@ -1,6 +1,7 @@
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+require('dotenv').config();
 
 const path = require('path');
 const merge = require('webpack-merge');
@@ -44,6 +45,8 @@ const commonConfig = function common(env, argv) {
         new webpack.DefinePlugin({
           'process.env.devHost': JSON.stringify(argv.devHost),
           'process.env.mode': JSON.stringify(argv.mode),
+          'process.env.API_BASE_URL': JSON.stringify(process.env.API_BASE_URL),
+          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         }),
       ],
     },

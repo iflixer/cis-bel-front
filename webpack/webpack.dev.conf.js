@@ -1,12 +1,15 @@
 const webpack = require('webpack');
 const path = require('path');
-const publicPath = 'kholobok-biz';
+require('dotenv').config();
+
+const buildOutputDir = process.env.BUILD_OUTPUT_DIR || 'kholobok-biz';
+const publicPathDev = process.env.PUBLIC_PATH_DEV || '/kholobok-biz/';
 
 module.exports = () => ({
   output: {
-    path: path.resolve(__dirname, `../${publicPath}`),
+    path: path.resolve(__dirname, `../${buildOutputDir}`),
     filename: '[name].js',
-    publicPath: `/${publicPath}/`,
+    publicPath: publicPathDev,
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

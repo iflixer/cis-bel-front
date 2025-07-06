@@ -1,12 +1,15 @@
 const path = require('path');
-const publicPath = 'kholobok.biz';
 const TerserPlugin = require('terser-webpack-plugin');
-//${publicPath}/
+require('dotenv').config();
+
+const buildOutputDir = process.env.BUILD_OUTPUT_DIR || 'kholobok.biz';
+const publicPath = process.env.PUBLIC_PATH || '/';
+
 module.exports = () => ({
   output: {
-    path: path.resolve(__dirname, `../${publicPath}`),
+    path: path.resolve(__dirname, `../${buildOutputDir}`),
     filename: 'js/[name].[hash].js',
-    publicPath: `/`,
+    publicPath: publicPath,
   },
   optimization: {
     namedModules: true,

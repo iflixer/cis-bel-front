@@ -9,12 +9,7 @@ import user from './modules/user';
 import tikets from './modules/tikets';
 import {router} from '~/router';
 
-// const siteUrl = 'https://api.testkholobok.ru/';
-// const siteUrl = 'https://adm.pleep.site/';
-
-// const siteUrl = 'https://sys.riveras.nl/';
-
-const siteUrl = 'https://sys.cdnhubstream.pro/';
+const siteUrl = process.env.API_BASE_URL || 'http://localhost/';
 
 Vue.use(Vuex);
 
