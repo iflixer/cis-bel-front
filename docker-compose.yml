@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: kolobok_frontend_app
+    ports:
+      - "8080:80"
+    networks:
+      - kolobok-frontend-network
+    restart: unless-stopped
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: kolobok_frontend_dev
+    ports:
+      - "8040:8040"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DEV_HOST=0.0.0.0
+    networks:
+      - kolobok-frontend-network
+    restart: unless-stopped
+
+networks:
+  kolobok-frontend-network:
+    driver: bridge

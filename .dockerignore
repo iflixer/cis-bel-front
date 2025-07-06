@@ -1,0 +1,14 @@
+node_modules/
+kholobok.biz/
+dist/
+.vscode/
+.idea/
+.env*
+!.env.example
+.DS_Store
+.git/
+.gitignore
+Dockerfile
+docker-compose*.yml
+.dockerignore
+.npm
