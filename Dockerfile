@@ -13,7 +13,7 @@ ENV PYTHON=/usr/bin/python2
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --include=dev
+RUN npm install
 
 COPY . .
 
@@ -45,7 +45,7 @@ RUN apt-get update && apt-get install -y \
 ENV PYTHON=/usr/bin/python2
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
 
 EXPOSE 8040
