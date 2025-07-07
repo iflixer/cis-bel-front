@@ -24,12 +24,12 @@ RUN npx rimraf kholobok.biz && \
 # Production image with nginx
 FROM nginx:stable AS production
 
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/default.conf.template /etc/nginx/templates/
 COPY --from=builder /app/kholobok.biz /usr/share/nginx/html
 
 EXPOSE 80
 
-CMD ["sh", "-c", "echo 'Starting nginx...' && echo 'Files in html:' && ls -la /usr/share/nginx/html/ && nginx -t && nginx -g 'daemon off;'"]
+CMD ["nginx", "-g", "daemon off;"]
 
 # Development image
 FROM node:14 AS development

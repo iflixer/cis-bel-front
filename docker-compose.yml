@@ -11,9 +11,10 @@ services:
       - "${APP_PORT:-8080}:80"
     environment:
       - NODE_ENV=${NODE_ENV:-production}
-      - API_BASE_URL=${API_BASE_URL}
+      - API_BASE_URL=${API_BASE_URL:-/api/}
       - BUILD_OUTPUT_DIR=${BUILD_OUTPUT_DIR:-kholobok.biz}
       - PUBLIC_PATH=${PUBLIC_PATH:-/}
+      - BACKEND_URL=${BACKEND_URL}
     env_file:
       - .env
     networks:
