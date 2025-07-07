@@ -34,6 +34,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          target: production
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/cis-bel-front:latest
           build-args: |
             SOURCE_COMMIT=${{ steps.vars.outputs.commit }}
