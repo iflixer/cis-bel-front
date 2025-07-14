@@ -157,14 +157,14 @@
 
   import moment from 'moment';
   import Hls from 'hls.js';
-  import fullScreen from 'fullscreen';
+  import fscreen from 'fscreen';
   import axios from 'axios';
 
 
-  import link from 'components/Link';
-  import baner from 'components/Baner';
-  import code from 'components/Code';
-  import vast from 'components/Vast';
+  import link from './components/Link';
+  import baner from './components/Baner';
+  import code from './components/Code';
+  import vast from './components/Vast';
   
 
   // console.log('vue start');
@@ -263,7 +263,6 @@
       event: 'playPlayer',
 
       Hls: null,
-      fullScreen: null,
 
       fullScreenActive: false,
       vizibleHls: false,
@@ -365,9 +364,11 @@
 
         await this.$nextTick(function () {
 
-          this.fullScreen = fullScreen(this.$refs.panel);
-          this.fullScreen.on('attain',() => { this.fullScreenActive = true; });
-          this.fullScreen.on('release',() => { this.fullScreenActive = false; });
+          if (fscreen.fullscreenEnabled) {
+            fscreen.addEventListener('fullscreenchange', () => {
+              this.fullScreenActive = !!fscreen.fullscreenElement;
+            });
+          }
 
           this.player = this.$refs.player;
           this.panel = this.$refs.panel;
@@ -522,8 +523,16 @@
       },
 
       // Перевести в и вывести из полного экрана
-      fullScreenPlayer(){ this.fullScreen.request(); },
-      notFullScreenPlayer(){ this.fullScreen.release(); },
+      fullScreenPlayer(){
+        if (fscreen.fullscreenEnabled) {
+          fscreen.requestFullscreen(this.$refs.panel);
+        }
+      },
+      notFullScreenPlayer(){
+        if (fscreen.fullscreenEnabled) {
+          fscreen.exitFullscreen();
+        }
+      },
 
       // Включить и выключить звук
       volumPlayer(){ this.muted = false; this.player.muted = false; },

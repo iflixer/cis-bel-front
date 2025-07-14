@@ -29,6 +29,8 @@
         "favicons-webpack-plugin": "^0.0.9",
         "fingerprintjs": "^0.5.3",
         "font-awesome": "^4.7.0",
+        "fscreen": "^1.2.0",
+        "hls.js": "^1.4.14",
         "html-webpack-plugin": "^3.2.0",
         "is-mergeable-object": "^1.1.1",
         "js-object-clone": "^0.4.2",

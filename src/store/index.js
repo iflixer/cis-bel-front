@@ -9,7 +9,7 @@ import user from './modules/user';
 import tikets from './modules/tikets';
 import {router} from '~/router';
 
-const siteUrl = process.env.API_BASE_URL || 'http://localhost/';
+const siteUrl = '/api/';
 
 Vue.use(Vuex);
 
