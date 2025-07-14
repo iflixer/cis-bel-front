@@ -36,7 +36,6 @@ jobs:
           push: true
           target: production
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/cis-bel-front:latest
-          target: production
           build-args: |
             SOURCE_COMMIT=${{ steps.vars.outputs.commit }}
             SOURCE_TAG=${{ steps.vars.outputs.tag }}
