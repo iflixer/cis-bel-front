@@ -7,7 +7,7 @@
       :before-close="close">
 
       <div v-if="visibleStep && videoId > 0" style="position:relative;padding-bottom:53.10%;padding-top:25px;height:0">
-        <iframe :src="'https://cdn0.cdnhubstream.pro/show/' + videoId" style="position:absolute;top:0;left:0;width:100%;height:100%" frameborder="0" allowfullscreen></iframe>
+        <iframe :src="'https://bel-cdn.printhouse.casa/show/' + videoId" style="position:absolute;top:0;left:0;width:100%;height:100%" frameborder="0" allowfullscreen></iframe>
       </div>
 
     </el-dialog>
