@@ -21,7 +21,7 @@ RUN npx rimraf kholobok.biz && \
     npx webpack --mode production && \
     ls -la kholobok.biz/
 
-COPY ./dop kholobok.biz/
+COPY ./dop kholobok.biz/dop
 
 # Production image with nginx
 FROM nginx:stable AS production
