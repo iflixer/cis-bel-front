@@ -131,10 +131,10 @@
             <label class="form__label" for="">Предпросмотр</label>
             <div class="form__upload-prevue-content">
               <div v-if="bodyBaner.body && bodyBaner.type == 'HTML'">
-                <iframe style="width:100%;height:100%;border:none;" :src="`https://api.cdnhubstream.pro/img/ads/${bodyBaner.body}`"></iframe>
+                <iframe style="width:100%;height:100%;border:none;" :src="`https://api.futemaxlive.com/img/ads/${bodyBaner.body}`"></iframe>
               </div>
               <div v-if="bodyBaner.body && bodyBaner.type == 'SVG/JPG'">
-                <div :style="`width:100%;height:200px;background: url(https://api.cdnhubstream.pro/img/ads/${bodyBaner.body}) center no-repeat;background-size:contain`"></div>
+                <div :style="`width:100%;height:200px;background: url(https://api.futemaxlive.com/img/ads/${bodyBaner.body}) center no-repeat;background-size:contain`"></div>
               </div>
             </div>
           </div>
