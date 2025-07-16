@@ -30,7 +30,8 @@ server {
     }
 
     location /images/module/ {
-        rewrite ^/images/module/(.*)$ /dop/module/$1 last;
+        # rewrite ^/images/module/(.*)$ /dop/module/$1 last;
+        alias /usr/share/nginx/html/dop/module/;
     }
 
     location /api/ {
