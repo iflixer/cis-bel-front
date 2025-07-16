@@ -102,10 +102,10 @@
               <label class="form__label" for="">Предпросмотр</label>
               <div class="form__upload-prevue-content">
                 <div v-if="bodyBaner.body && bodyBaner.type == 'HTML'">
-                  <iframe style="width:100%;height:100%;border:none;" :src="`https://api.futemaxlive.com/img/ads/${bodyBaner.body}`"></iframe>
+                  <iframe style="width:100%;height:100%;border:none;" :src="`https://futmax.info/img/ads/${bodyBaner.body}`"></iframe>
                 </div>
                 <div v-if="bodyBaner.body && bodyBaner.type == 'SVG/JPG'">
-                  <div class="form__upload-prevue-img" :style="`width:100%;height:173px;background-image: url(https://api.futemaxlive.com/img/ads/${bodyBaner.body});`"></div>
+                  <div class="form__upload-prevue-img" :style="`width:100%;height:173px;background-image: url(https://futmax.info/img/ads/${bodyBaner.body});`"></div>
                 </div>
               </div>
             </div>
