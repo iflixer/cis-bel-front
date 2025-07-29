@@ -17,7 +17,7 @@ services:
     env_file:
       - .env
     networks:
-      - kolobok-frontend-network
+      - kolobok-shared-network
     restart: unless-stopped
   dev:
     build:
@@ -40,9 +40,9 @@ services:
     env_file:
       - .env
     networks:
-      - kolobok-frontend-network
+      - kolobok-shared-network
     restart: unless-stopped
 
 networks:
-  kolobok-frontend-network:
-    driver: bridge
+  kolobok-shared-network:
+    external: true

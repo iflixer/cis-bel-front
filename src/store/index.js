@@ -13,7 +13,7 @@ const siteUrl = '/api/';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
 
   state: {
     messages: [],
@@ -80,5 +80,42 @@ export default new Vuex.Store({
     tikets
   },
   strict: true,
-  plugins: [createPersistedState()]
+  plugins: [createPersistedState({
+    storage: window.localStorage,
+    reducer: (state) => {
+      return {
+        user: state.user
+      }
+    }
+  })]
 });
+
+window.addEventListener('storage', (e) => {
+  if (e.key === 'vuex' && e.newValue) {
+    try {
+      const newState = JSON.parse(e.newValue);
+      if (newState.user) {
+        store.commit('setToken', newState.user.token || '');
+        store.commit('setTokenRefresh', newState.user.tokenRefresh || '');
+        store.commit('setStatus', newState.user.status || '');
+        store.commit('setName', newState.user.name || '');
+        
+        if (!newState.user.token && router.currentRoute.name !== 'Authorization') {
+          router.push({name: 'Authorization'});
+        }
+
+        else if (newState.user.token &&
+                (router.currentRoute.name === 'Authorization' || 
+                 router.currentRoute.name === 'Registration' ||
+                 router.currentRoute.name === 'ForgotPassword' ||
+                 router.currentRoute.name === 'ResetPassword')) {
+          router.push({name: 'AdminPanel'});
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing storage event:', error);
+    }
+  }
+});
+
+export default store;
