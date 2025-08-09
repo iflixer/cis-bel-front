@@ -253,7 +253,6 @@
     }
   }
 
-
   .menu-button{
     padding: 25px 25px 150px 25px;
     
@@ -280,5 +279,7 @@
   .ArticlesPage{ background: url(../../assets/images/svg-icons/BLANK.svg) no-repeat center/ 40px; }
 
   .TranslationPage{ background: url(../../assets/images/svg-icons/MICROPHONE.svg) no-repeat center/ 30px; }
+  .DomainTagsPage{ background: url(../../assets/images/svg-icons/BLANK.svg) no-repeat center/ 30px; }
+  .DomainTagsAssignPage{ background: url(../../assets/images/svg-icons/BLANK.svg) no-repeat center/ 30px; }
 
 </style>

@@ -37,6 +37,7 @@ services:
       - BUILD_OUTPUT_DIR=${BUILD_OUTPUT_DIR:-kholobok.biz}
       - PUBLIC_PATH=${PUBLIC_PATH:-/}
       - PUBLIC_PATH_DEV=${PUBLIC_PATH_DEV:-/kholobok-biz/}
+      - BACKEND_URL=${BACKEND_URL}
     env_file:
       - .env
     networks:

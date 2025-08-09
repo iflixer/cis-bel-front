@@ -236,6 +236,32 @@ export const routers = [
     }
   },
 
+  {
+    path: '/domain-tags',
+    name: 'DomainTagsPage',
+    component: () => import('~/components/DomainTagsPage/DomainTagsPage'),
+    props: true,
+    meta: {
+      middleware: [auth],
+      title: "Теги доменов",
+      visible: true,
+      rights: ['client', 'redactor', 'managing']
+    }
+  },
+
+  {
+    path: '/domains-tags-assign',
+    name: 'DomainTagsAssignPage',
+    component: () => import('~/components/DomainTagsAssignPage/DomainTagsAssignPage'),
+    props: true,
+    meta: {
+      middleware: [auth],
+      title: "Назначение тегов доменам",
+      visible: true,
+      rights: ['client', 'redactor', 'managing']
+    }
+  },
+
 
   {
     path: '/*',
@@ -268,7 +294,6 @@ router.beforeEach((to, from, next) => {
   const context = {to, from, next, store}; // Установка нового context
   return middleware[0]({ ...context, next: middlewarePipeline(context, middleware, 1) }); // Передача на конвеер
 });
-
 
 
 
