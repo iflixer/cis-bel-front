@@ -381,7 +381,7 @@
         // let link = `https://${this.userInfo.domain}/show/${id}`;
         // let link = `https://cdn0.cloudcdn.xyz/show/${id}`;
         
-        let link = `https://bel-cdn.printhouse.casa/show/${id}`;
+        let link = `https://cdn0.cdnhub.help/show/${id}`;
 
         // if(this.flagHttpsLink){ link = 'https'+ link; }else{ link = 'http'+ link; }
         if(this.flagFraimeLink){link = '<iframe src="'+ link +'" frameborder="0" width="610" height="370" allowfullscreen></iframe>'}
