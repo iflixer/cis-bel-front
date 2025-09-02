@@ -171,7 +171,7 @@
                         </a> 
                         <i
                           class="el-icon-copy-document" aria-hidden="true" title="Скопировать"
-                          style="margin-left:7px" @click="copyElement(scope.row.kinopoisk)">
+                          style="margin-left:7px" @click="copyElement(String(scope.row.kinopoisk))">
                         </i>
                       </div>
                     </template>
