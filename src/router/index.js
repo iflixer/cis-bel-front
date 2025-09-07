@@ -262,6 +262,19 @@ export const routers = [
     }
   },
 
+  {
+    path: '/cdns',
+    name: 'CDNsPage',
+    component: () => import('~/components/CDNsPage/CDNsPage'),
+    props: true,
+    meta: {
+      middleware: [auth],
+      title: "Управление CDN",
+      visible: true,
+      rights: ['client', 'redactor', 'managing']
+    }
+  },
+
 
   {
     path: '/*',
