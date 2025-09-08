@@ -117,7 +117,7 @@ export default {
     isAuth: async ({state, dispatch}) => {
       console.log('Использование isAuth');
 
-      if(state.token && state.token.trim() !== '' && state.token !== '123'Fix){
+      if(state.token && state.token.trim() !== '' && state.token !== '123'){
         return true;
       }
       

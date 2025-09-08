@@ -491,7 +491,7 @@
       userAuth(){ return this.$store.state.user; },
       title(){ return this.$router.currentRoute.meta.title},
       score(){ return Number(this.userInfo.score).toFixed(2);},
-      listIdDomains(){ return this.listDomains.filter(item => item.status == '1'); }
+      listIdDomains(){ return this.listDomains.filter(item => item.status == '1' || item.status == 1); }
     },
 
     methods: {
