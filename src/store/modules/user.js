@@ -1,6 +1,6 @@
 export default {
   state: {
-    token: '123',
+    token: '',
     tokenRefresh: '',
     status: '',
     name: ''
@@ -117,13 +117,15 @@ export default {
     isAuth: async ({state, dispatch}) => {
       console.log('Использование isAuth');
 
-      if(state.token != ''){
+      if(state.token && state.token.trim() !== '' && state.token !== '123'Fix){
         return true;
-      }else if(state.token == ''){
+      }
+      
+      if(state.tokenRefresh && state.tokenRefresh.trim() !== ''){
         return await dispatch('resetToken');
       }
+      
       return false;
-
     }
   }
 }

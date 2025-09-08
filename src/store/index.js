@@ -35,27 +35,39 @@ const store = new Vuex.Store({
       // console.log('Использование requestApi');
 
       return new Promise((resolve, reject) => {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${state.user.token}`;
+        if (state.user.token && state.user.token.trim() !== '') {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${state.user.token}`;
+        } else {
+          delete axios.defaults.headers.common['Authorization'];
+        }
         axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
 
         axios({ url: siteUrl + url, data, method})
         .then( async ({data: {data, messages}}) => {
 
           // dispatch('setMessages', messages);
-          if(messages.length > 0 ){
+          if(messages && messages.length > 0 ){
             messages.forEach(element => {
-              Notification({ type: element.tupe, title: 'Message', message: element.message, customClass: 'messages-ui' });
+              const notificationType = element.type || element.tupe || 'info';
+              Notification({ type: notificationType, title: 'Message', message: element.message, customClass: 'messages-ui' });
             });
           }
 
-          if( messages[0] && messages[0].code == 412){
+          if( messages && messages[0] && messages[0].code == 412){
+            console.log('Token expired, attempting refresh...');
             if(await dispatch('resetToken')){
-              router.go();
+              console.log('Token refreshed successfully, retrying request...');
+              const retryResponse = await dispatch('requestApi', {url, data, method});
+              resolve(retryResponse);
+              return;
             }else{
+              console.log('Token refresh failed, redirecting to login...');
               commit('setToken', '');
               commit('setTokenRefresh', '');
               commit('setStatus', '');
+              commit('setName', '');
               router.push({name: 'Authorization'});
+              reject(new Error('Authentication failed'));
               return;
             }
           }
@@ -68,7 +80,16 @@ const store = new Vuex.Store({
             
         })
         .catch((error) => {
-          Notification({ type: 'error', title: 'Ошибка', message: error, customClass: 'messages-ui' });
+          console.error('API request failed:', error);
+          if (error.response && error.response.status === 401) {
+            commit('setToken', '');
+            commit('setTokenRefresh', '');
+            commit('setStatus', '');
+            commit('setName', '');
+            router.push({name: 'Authorization'});
+          }
+          Notification({ type: 'error', title: 'Ошибка', message: error.message || error, customClass: 'messages-ui' });
+          reject(error);
         })
       });
 
