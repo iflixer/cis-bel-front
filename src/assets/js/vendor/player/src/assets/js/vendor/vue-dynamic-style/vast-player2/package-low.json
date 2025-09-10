@@ -61,8 +61,6 @@
     "karma": "^0.13.19",
     "karma-browserify": "^5.0.1",
     "karma-jasmine": "^0.3.7",
-    "karma-phantomjs-launcher": "^1.0.0",
-    "phantomjs-prebuilt": "^2.1.4",
     "proxyquire": "^1.7.4",
     "proxyquire-universal": "^1.0.8",
     "proxyquireify": "^3.1.1",

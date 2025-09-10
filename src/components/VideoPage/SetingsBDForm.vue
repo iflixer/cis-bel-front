@@ -103,7 +103,8 @@
         countVideo: 0,
         countDropVideo: 0,
         steps: 0,
-        countInStep: 5,
+        // countInStep: 5,
+        countInStep: 2,
         progressSteps: 0,
         update: false,
         startUpdate: false

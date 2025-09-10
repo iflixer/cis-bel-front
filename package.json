@@ -26,7 +26,6 @@
         "dr-vue-echarts": "^1.0.13",
         "echarts": "^4.8.0",
         "element-ui": "^2.13.2",
-        "favicons-webpack-plugin": "^0.0.9",
         "fingerprintjs": "^0.5.3",
         "font-awesome": "^4.7.0",
         "fscreen": "^1.2.0",
