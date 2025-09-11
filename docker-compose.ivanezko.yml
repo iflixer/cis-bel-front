@@ -1,0 +1,22 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: kolobok_frontend_app
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      - BACKEND_URL=${BACKEND_URL}
+    env_file:
+      - .env
+    networks:
+      - cis-bel-back_kolobok_network
+    restart: unless-stopped
+  
+
+networks:
+  cis-bel-back_kolobok_network:
+    external: true
