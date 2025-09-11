@@ -99,7 +99,7 @@
         countVideo: 0,
         countDropVideo: 0,
         steps: 0,
-        countInStep: 2,
+        countInStep: 1,
         progressSteps: 0,
         update: false,
         startUpdate: false
