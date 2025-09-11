@@ -86,15 +86,11 @@
     props: ['visible'],
     data(){return{
       visibleStep: false,
-
-
       count_vdb: 0,
-
       updateOffset: 0,//this.data.videodb.count_vdb,
-      steps: 2,
+      steps: 5,
       next: null,
       preolaoded: false,
-
       updateUpOffset: 0,
       preolaodedUp: false,
       stepsUp: 0,
@@ -103,8 +99,7 @@
         countVideo: 0,
         countDropVideo: 0,
         steps: 0,
-        // countInStep: 5,
-        countInStep: 2,
+        countInStep: 1,
         progressSteps: 0,
         update: false,
         startUpdate: false
