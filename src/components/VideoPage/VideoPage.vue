@@ -380,8 +380,11 @@
         // let link = `://${this.userInfo.domain}/show/${id}`;
         // let link = `https://${this.userInfo.domain}/show/${id}`;
         // let link = `https://cdn0.cloudcdn.xyz/show/${id}`;
-        
+
         let link = `https://cdn0.cdnhub.help/show/${id}`;
+        if (window.location.hostname.includes('.local')) {
+          link = `https://nginx.cis-bel-back.orb.local/show/${id}?domain=nginx.cis-bel-back.orb.local`
+        }
 
         // if(this.flagHttpsLink){ link = 'https'+ link; }else{ link = 'http'+ link; }
         if(this.flagFraimeLink){link = '<iframe src="'+ link +'" frameborder="0" width="610" height="370" allowfullscreen></iframe>'}

@@ -1,14 +1,19 @@
 
 services:
-  app:
+  prod:
     build:
       context: .
       dockerfile: Dockerfile
       target: production
-    container_name: kolobok_frontend_app
+      args:
+        - VUE_APP_PLAYER_URL=https://nginx.cis-bel-back.orb.local
+    container_name: kolobok_frontend_prod
     ports:
       - "${APP_PORT:-8080}:80"
     environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - BUILD_OUTPUT_DIR=${BUILD_OUTPUT_DIR:-kholobok.biz}
+      - PUBLIC_PATH=${PUBLIC_PATH:-/}
       - BACKEND_URL=${BACKEND_URL}
     env_file:
       - .env
@@ -16,6 +21,29 @@ services:
       - cis-bel-back_kolobok_network
     restart: unless-stopped
   
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: kolobok_frontend_dev
+    ports:
+      - "${DEV_PORT:-8040}:${DEV_PORT:-8040}"
+    volumes:
+      - .:/app
+      - ./static:/usr/share/nginx/html/static
+      - /app/node_modules
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - DEV_HOST=${DEV_HOST:-0.0.0.0}
+      - DEV_PORT=${DEV_PORT:-8040}
+      - BUILD_OUTPUT_DIR=${BUILD_OUTPUT_DIR:-kholobok.biz}
+      - PUBLIC_PATH=${PUBLIC_PATH:-/}
+      - PUBLIC_PATH_DEV=${PUBLIC_PATH_DEV:-/kholobok-biz/}
+      - BACKEND_URL=${BACKEND_URL}
+    networks:
+      - cis-bel-back_kolobok_network
+    restart: unless-stopped
 
 networks:
   cis-bel-back_kolobok_network:

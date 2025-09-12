@@ -7,7 +7,7 @@
       :before-close="close">
 
       <div v-if="visibleStep && videoId > 0" style="position:relative;padding-bottom:53.10%;padding-top:25px;height:0">
-        <iframe :src="'https://cdn0.cdnhub.help/show/' + videoId" style="position:absolute;top:0;left:0;width:100%;height:100%" frameborder="0" allowfullscreen></iframe>
+        <iframe :src="`${playerBase}/show/${videoId}`" style="position:absolute;top:0;left:0;width:100%;height:100%" frameborder="0" allowfullscreen></iframe>
       </div>
 
     </el-dialog>
@@ -16,9 +16,16 @@
 
 <script>
   import player from '~/assets/js/vendor/player/src/App';
-
   export default {
     name: 'ShowVideo',
+    computed: {
+      playerBase () {
+        if (window.location.hostname.includes('.local')) {
+          return 'https://nginx.cis-bel-back.orb.local'
+        }
+        return 'https://cdn0.cdnhub.help'
+      }
+    },
     components: {
       'player-fin': player
     },

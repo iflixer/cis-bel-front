@@ -29,6 +29,8 @@ FROM nginx:stable AS production
 COPY nginx/default.conf.template /etc/nginx/templates/
 COPY --from=builder /app/kholobok.biz /usr/share/nginx/html
 
+COPY ./static /usr/share/nginx/html/static
+
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
