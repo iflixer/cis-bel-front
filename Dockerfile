@@ -29,7 +29,7 @@ FROM nginx:stable AS production
 COPY nginx/default.conf.template /etc/nginx/templates/
 COPY --from=builder /app/kholobok.biz /usr/share/nginx/html
 
-COPY ./static /usr/share/nginx/html/static
+COPY ./static /usr/share/nginx/html/
 
 EXPOSE 80
 
