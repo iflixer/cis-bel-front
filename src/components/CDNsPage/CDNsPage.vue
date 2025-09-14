@@ -50,6 +50,39 @@
                     </el-table-column>
 
                     <el-table-column
+                      prop="tx5m"
+                      label="TX 5min"
+                      width="120"
+                      sortable>
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.tx5m !== null && scope.row.tx5m !== undefined">{{ formatBytes(scope.row.tx5m) }}</span>
+                        <span v-else class="text-muted">—</span>
+                      </template>
+                    </el-table-column>
+
+                    <el-table-column
+                      prop="rx5m"
+                      label="RX 5min"
+                      width="120"
+                      sortable>
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.rx5m !== null && scope.row.rx5m !== undefined">{{ formatBytes(scope.row.rx5m) }}</span>
+                        <span v-else class="text-muted">—</span>
+                      </template>
+                    </el-table-column>
+
+                    <el-table-column
+                      prop="ratio"
+                      label="Ratio"
+                      width="100"
+                      sortable>
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.ratio !== null && scope.row.ratio !== undefined">{{ scope.row.ratio }}</span>
+                        <span v-else class="text-muted">—</span>
+                      </template>
+                    </el-table-column>
+
+                    <el-table-column
                       label="Статус"
                       width="120">
                       <template slot-scope="scope">
@@ -160,6 +193,16 @@ export default {
         hour: '2-digit',
         minute: '2-digit'
       });
+    },
+
+    formatBytes(bytes) {
+      if (!bytes || bytes === 0) return '0 B';
+      
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
     }
 
   }
