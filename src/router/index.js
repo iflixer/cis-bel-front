@@ -275,6 +275,19 @@ export const routers = [
     }
   },
 
+  {
+    path: '/geo-groups',
+    name: 'GeoGroupsPage',
+    component: () => import('~/components/GeoGroupsPage/GeoGroupsPage'),
+    props: true,
+    meta: {
+      middleware: [auth],
+      title: "Гео-группы",
+      visible: true,
+      rights: ['client', 'redactor', 'managing']
+    }
+  },
+
 
   {
     path: '/*',
