@@ -132,8 +132,8 @@
                     <template slot-scope="scope">
                       {{ scope.row.ru_name }}
                       <div>
-                        <span v-if="scope.row.img"><img :src="scope.row.img" width="70" height="100"/></span>
-                        <span v-if="scope.row.backdrop"><img :src="scope.row.backdrop" width="170" height="100"/></span>
+                        <span v-if="scope.row.img"><img :src="scope.row.img.replace('.jpg', '@h100.jpg')" height="100"/></span>
+                        <span v-if="scope.row.backdrop"><img :src="scope.row.backdrop.replace('.jpg', '@h100.jpg')" height="100"/></span>
                       </div>
                     </template>
                   </el-table-column>
