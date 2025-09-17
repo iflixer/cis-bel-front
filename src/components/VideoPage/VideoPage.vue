@@ -91,6 +91,7 @@
                 
                 <el-table
                   :data="videos"
+                  :row-key="row => row.id"
                   stripe
                   style="width: 100%">
 
@@ -120,15 +121,20 @@
                       <!-- <i class="el-icon-film"></i> -->
                       <div class="tag tag-border tag--icon" v-if="scope.row.tupe == 'movie'" title="фильм">Fi</div>
                       <div class="tag tag-border tag--icon" v-else title="сериал">Se</div>
+                    
                     </template>
                   </el-table-column>
 
                   <el-table-column
+                    min-width="300" 
                     prop="ru_name"
                     label="Название">
                     <template slot-scope="scope">
                       {{ scope.row.ru_name }}
-                      <a href="#" class="icon-movie-edit" v-if="isRight" v-on:click.prevent="translationsFormFlag = true; filmData.id = scope.row.id; filmData.tupe = scope.row.tupe;" title="Управление переводами"><i class="fa fa-bars" aria-hidden="true"></i></a>
+                      <div>
+                        <span v-if="scope.row.img"><img :src="scope.row.img" width="70" height="100"/></span>
+                        <span v-if="scope.row.backdrop"><img :src="scope.row.backdrop" width="170" height="100"/></span>
+                      </div>
                     </template>
                   </el-table-column>
 
@@ -153,11 +159,27 @@
                     label="Озвучка">
                   </el-table-column> -->
 
-                  <el-table-column
-                    prop="translation"
-                    label="Озвучка">
+                  <el-table-column label="Озвучка" min-width="220" prop="translation">
                     <template slot-scope="scope">
-                      <div v-for="(item, index) in scope.row.translations" :key="index">{{ item.title }}</div>
+                      <template v-if="scope.row.translations && scope.row.translations.length">
+                        <template v-if="!isTrOpen(scope.row.id)">
+                          <span>
+                            <!-- {{ scope.row.translations.slice(0,2).map(t=>t.title).join(', ') }} -->
+                            {{ scope.row.translations.length }}
+                            <template v-if="scope.row.translations.length > 0">
+                              <el-link type="primary" @click="toggleTr(scope.row.id)" style="margin-left:6px">Показать</el-link>
+                            </template>
+                          </span>
+                        </template>
+                        <div v-else>
+                          <ol style="margin-left: 10px;">
+                            <li v-for="(item, i) in scope.row.translations" :key="i">{{ item.title }}</li>
+                          </ol>
+                          <el-link type="primary" @click="toggleTr(scope.row.id)">Скрыть</el-link>
+                        </div>
+                      </template>
+                      <span v-else>—</span>
+                      <a href="#" class="icon-movie-edit" v-if="isRight" v-on:click.prevent="translationsFormFlag = true; filmData.id = scope.row.id; filmData.tupe = scope.row.tupe;" title="Управление переводами"><i class="fa fa-bars" aria-hidden="true"></i></a>
                     </template>
                   </el-table-column>
 
@@ -274,7 +296,7 @@
 
       videoData: null, // Данные от запроса видео для модалки фильтра
       filter: {}, // Объект фильра, заполняется событием из модалки
-      videos: null, // Массив видеоматериалов
+      videos: [], // Массив видеоматериалов
       count: null,
       search: '', // Строка поиска
 
@@ -295,7 +317,8 @@
         tupe: 'movie'
       },
 
-      userInfo: null
+      userInfo: null,
+      trOpen: {}
     }},
     async created() {
       // хеш для страницы
@@ -448,7 +471,12 @@
           // this.$refs.articles__scrol.scrollTop = 0;
         });
       },
-
+      isTrOpen(id) {
+        return !!this.trOpen[id];
+      },
+      toggleTr(id) {
+        this.$set(this.trOpen, id, !this.trOpen[id]);
+      }
     }
   }
 </script>
