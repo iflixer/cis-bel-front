@@ -50,6 +50,61 @@
       </div>
     </el-dialog>
 
+    <el-dialog
+      title="Импорт доменов из файла"
+      :visible.sync="importDomainsModal"
+      width="600px">
+      <div>
+        <div class="form__element-form">
+          <label class="form__label">Выберите CSV файл с доменами (первый столбец)</label>
+          <el-upload
+            class="upload-demo"
+            drag
+            accept=".csv"
+            :on-change="handleFileChange"
+            :before-upload="beforeUpload"
+            :file-list="fileList"
+            :auto-upload="false">
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">Перетащите файл сюда или <em>нажмите для выбора</em></div>
+            <div class="el-upload__tip" slot="tip">Только CSV файлы</div>
+          </el-upload>
+        </div>
+
+        <div class="form__element-form" v-if="domainTags.length > 0">
+          <label class="form__label">Выберите тип домена</label>
+          <el-select 
+            v-model="selectedDomainTag" 
+            placeholder="Выберите тип домена"
+            class="form__input">
+            <el-option
+              v-for="tag in domainTags"
+              :key="tag.id"
+              :label="tag.name"
+              :value="tag.id">
+            </el-option>
+          </el-select>
+        </div>
+
+        <div v-if="parsedDomains.length > 0" class="form__element-form">
+          <label class="form__label">Предварительный просмотр доменов ({{ parsedDomains.length }} шт.)</label>
+          <div class="domain-preview" style="max-height: 200px; overflow-y: auto; border: 1px solid #dcdfe6; padding: 10px; border-radius: 4px;">
+            <div v-for="(domain, index) in parsedDomains" :key="index" style="padding: 2px 0;">
+              {{ domain }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="importDomainsModal = false">Отмена</el-button>
+        <el-button 
+          type="primary" 
+          :disabled="!canImport || importInProgress"
+          :loading="importInProgress"
+          @click="importDomains()">Импортировать</el-button>
+      </span>
+    </el-dialog>
+
 
     <tiket-cent-modal :visible.sync="centOutForm" :data="{ summ: score, cent: centData }" @close="centOutForm = false; getUserInfo()"></tiket-cent-modal>
 
@@ -379,6 +434,12 @@
                       </el-col>
                     </el-row>
 
+                    <el-row :gutter="20" style="margin-top: 15px;">
+                      <el-col :span="24">
+                        <button class="form__button" v-on:click="openImportModal()" style="width: 100%;">Импорт доменов из файла</button>
+                      </el-col>
+                    </el-row>
+
                     <el-table
                       :data="listDomains"
                       stripe
@@ -477,7 +538,14 @@
       centDeleteType: null,
 
       centOutForm: false,
-      centOperationForm: false
+      centOperationForm: false,
+
+      importDomainsModal: false,
+      fileList: [],
+      parsedDomains: [],
+      selectedDomainTag: '',
+      domainTags: [],
+      importInProgress: false
     }),
 
     async created() {
@@ -485,13 +553,17 @@
 
       await this.getUserInfo();
       await this.getListDomains();
+      await this.getDomainTags();
     },
 
     computed:{
       userAuth(){ return this.$store.state.user; },
       title(){ return this.$router.currentRoute.meta.title},
       score(){ return Number(this.userInfo.score).toFixed(2);},
-      listIdDomains(){ return this.listDomains.filter(item => item.status == '1' || item.status == 1); }
+      listIdDomains(){ return this.listDomains.filter(item => item.status == '1' || item.status == 1); },
+      canImport(){ 
+        return this.parsedDomains.length > 0 && this.selectedDomainTag && !this.importInProgress; 
+      }
     },
 
     methods: {
@@ -550,6 +622,101 @@
         this.centDeletForm = true;
       },
 
+      async getDomainTags(){
+        try {
+          const response = await this.postMethod('domaintags.getAll');
+          this.domainTags = response.filter(tag => tag.type === 'domain_type');
+        } catch (error) {
+          console.error('Error fetching domain tags:', error);
+        }
+      },
+
+      openImportModal(){
+        this.importDomainsModal = true;
+        this.fileList = [];
+        this.parsedDomains = [];
+        this.selectedDomainTag = '';
+      },
+
+      beforeUpload(file){
+        const isCSV = file.type === 'text/csv' || file.name.endsWith('.csv');
+        if (!isCSV) {
+          this.$notify.error({ title: 'Ошибка', message: 'Можно загружать только CSV файлы!', customClass: 'messages-ui' });
+        }
+        return false;
+      },
+
+      handleFileChange(file, fileList){
+        this.fileList = fileList;
+        if (file.raw) {
+          this.parseCSVFile(file.raw);
+        }
+      },
+
+      parseCSVFile(file){
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const csv = e.target.result;
+          const lines = csv.split('\n');
+          const domains = [];
+          
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (line) {
+              const columns = line.split(',');
+              const domain = columns[0] ? columns[0].trim().replace(/["']/g, '') : '';
+              if (domain && domain !== 'domain' && domain !== 'Domain') { // Skip header
+                domains.push(domain);
+              }
+            }
+          }
+          
+          this.parsedDomains = domains;
+          if (domains.length === 0) {
+            this.$notify.warning({ title: 'Предупреждение', message: 'В файле не найдено доменов для импорта', customClass: 'messages-ui' });
+          }
+        };
+        reader.readAsText(file);
+      },
+
+      async importDomains(){
+        if (!this.canImport) return;
+        
+        this.importInProgress = true;
+        
+        try {
+          const response = await this.postMethod('domains.importFromCsv', {
+            domains: this.parsedDomains,
+            domain_tag_id: this.selectedDomainTag
+          });
+          
+          if (response && response.success_count !== undefined) {
+            this.$notify.success({ 
+              title: 'Успех', 
+              message: `Импортировано доменов: ${response.success_count}/${this.parsedDomains.length}`, 
+              customClass: 'messages-ui' 
+            });
+            
+            if (response.errors && response.errors.length > 0) {
+              response.errors.forEach(error => {
+                this.$notify.error({ 
+                  title: 'Ошибка импорта', 
+                  message: error, 
+                  customClass: 'messages-ui' 
+                });
+              });
+            }
+
+            await this.getListDomains();
+            this.importDomainsModal = false;
+          }
+        } catch (error) {
+          console.error('Import error:', error);
+          this.$notify.error({ title: 'Ошибка', message: 'Ошибка при импорте доменов', customClass: 'messages-ui' });
+        } finally {
+          this.importInProgress = false;
+        }
+      },
 
       addDomain: function () {
           

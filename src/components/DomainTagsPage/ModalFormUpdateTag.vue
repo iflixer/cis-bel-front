@@ -18,6 +18,12 @@
           placeholder="Введите значение тега">
         </el-input>
       </el-form-item>
+      
+      <el-form-item label="Тип" prop="type">
+        <el-select v-model="form.type" placeholder="Выберите тип тега" style="width: 100%">
+          <el-option label="Domain Type" value="domain_type"></el-option>
+        </el-select>
+      </el-form-item>
     </el-form>
 
     <span slot="footer" class="dialog-footer">
@@ -44,7 +50,8 @@ export default {
     return {
       form: {
         name: '',
-        value: ''
+        value: '',
+        type: ''
       },
       rules: {
         name: [
@@ -52,6 +59,9 @@ export default {
         ],
         value: [
           { required: true, message: 'Пожалуйста, введите значение тега', trigger: 'blur' }
+        ],
+        type: [
+          { required: true, message: 'Пожалуйста, введите тип тега', trigger: 'blur' }
         ]
       }
     }
@@ -66,7 +76,8 @@ export default {
           this.postMethod('domaintags.update', {
             id: this.tag.id,
             name: this.form.name,
-            value: this.form.value
+            value: this.form.value,
+            type: this.form.type
           }).then(() => {
             this.close();
           }).catch(error => {
@@ -80,7 +91,8 @@ export default {
       if (this.tag && this.tag.id) {
         this.form = {
           name: this.tag.name || '',
-          value: this.tag.value || ''
+          value: this.tag.value || '',
+          type: this.tag.type || 'domain_type'
         };
       }
     },
@@ -88,7 +100,8 @@ export default {
     resetForm() {
       this.form = {
         name: '',
-        value: ''
+        value: '',
+        type: ''
       };
       if (this.$refs.tagUpdateForm) {
         this.$refs.tagUpdateForm.resetFields();

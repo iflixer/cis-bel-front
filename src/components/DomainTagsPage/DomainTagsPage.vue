@@ -52,6 +52,14 @@
                       </template>
                     </el-table-column>
                     <el-table-column
+                      prop="type"
+                      label="Тип"
+                      width="150">
+                      <template slot-scope="scope">
+                        {{ scope.row.type || 'domain_type' }}
+                      </template>
+                    </el-table-column>
+                    <el-table-column
                       label=""
                       width="120">
                       <template slot-scope="scope">
@@ -106,6 +114,7 @@
         this.postMethod('domaintags.get', {})
         .then(response => {
           this.tagsList = response;
+          this.$forceUpdate();
         })
         .catch(error => {
           console.log(error);

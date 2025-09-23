@@ -7,6 +7,7 @@ import { Notification } from 'element-ui';
 
 import user from './modules/user';
 import tikets from './modules/tikets';
+import prices from './modules/prices';
 import {router} from '~/router';
 
 const siteUrl = '/api/';
@@ -17,7 +18,8 @@ const store = new Vuex.Store({
 
   state: {
     messages: [],
-    route: null
+    route: null,
+    apiURL: siteUrl
   },
   getters: {},
   mutations: {
@@ -98,7 +100,8 @@ const store = new Vuex.Store({
 
   modules: {
     user,
-    tikets
+    tikets,
+    prices
   },
   strict: true,
   plugins: [createPersistedState({

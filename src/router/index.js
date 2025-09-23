@@ -288,6 +288,19 @@ export const routers = [
     }
   },
 
+  {
+    path: '/prices',
+    name: 'PricesPage',
+    component: () => import('~/components/PricesPage/PricesPage'),
+    props: true,
+    meta: {
+      middleware: [auth],
+      title: "Управление ценами",
+      visible: true,
+      rights: ['client', 'redactor', 'managing']
+    }
+  },
+
 
   {
     path: '/*',
