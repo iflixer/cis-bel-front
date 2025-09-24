@@ -71,17 +71,17 @@
           </el-upload>
         </div>
 
-        <div class="form__element-form" v-if="domainTags.length > 0">
+        <div class="form__element-form" v-if="domainTypes.length > 0">
           <label class="form__label">Выберите тип домена</label>
           <el-select 
-            v-model="selectedDomainTag" 
+            v-model="selectedDomainType" 
             placeholder="Выберите тип домена"
             class="form__input">
             <el-option
-              v-for="tag in domainTags"
-              :key="tag.id"
-              :label="tag.name"
-              :value="tag.id">
+              v-for="domainType in domainTypes"
+              :key="domainType.id"
+              :label="domainType.name"
+              :value="domainType.id">
             </el-option>
           </el-select>
         </div>
@@ -543,8 +543,8 @@
       importDomainsModal: false,
       fileList: [],
       parsedDomains: [],
-      selectedDomainTag: '',
-      domainTags: [],
+      selectedDomainType: '',
+      domainTypes: [],
       importInProgress: false
     }),
 
@@ -553,7 +553,7 @@
 
       await this.getUserInfo();
       await this.getListDomains();
-      await this.getDomainTags();
+      await this.getDomainTypes();
     },
 
     computed:{
@@ -562,7 +562,7 @@
       score(){ return Number(this.userInfo.score).toFixed(2);},
       listIdDomains(){ return this.listDomains.filter(item => item.status == '1' || item.status == 1); },
       canImport(){ 
-        return this.parsedDomains.length > 0 && this.selectedDomainTag && !this.importInProgress; 
+        return this.parsedDomains.length > 0 && this.selectedDomainType && !this.importInProgress; 
       }
     },
 
@@ -622,12 +622,12 @@
         this.centDeletForm = true;
       },
 
-      async getDomainTags(){
+      async getDomainTypes(){
         try {
-          const response = await this.postMethod('domaintags.getAll');
-          this.domainTags = response.filter(tag => tag.type === 'domain_type');
+          const response = await this.postMethod('domaintypes.getAll');
+          this.domainTypes = response;
         } catch (error) {
-          console.error('Error fetching domain tags:', error);
+          console.error('Error fetching domain types:', error);
         }
       },
 
@@ -635,7 +635,7 @@
         this.importDomainsModal = true;
         this.fileList = [];
         this.parsedDomains = [];
-        this.selectedDomainTag = '';
+        this.selectedDomainType = '';
       },
 
       beforeUpload(file){
@@ -687,7 +687,7 @@
         try {
           const response = await this.postMethod('domains.importFromCsv', {
             domains: this.parsedDomains,
-            domain_tag_id: this.selectedDomainTag
+            domain_type_id: this.selectedDomainType
           });
           
           if (response && response.success_count !== undefined) {

@@ -235,32 +235,42 @@ export const routers = [
       rights: ['client', 'redactor', 'managing']
     }
   },
-
   {
-    path: '/domain-tags',
-    name: 'DomainTagsPage',
-    component: () => import('~/components/DomainTagsPage/DomainTagsPage'),
+    path: '/domain-types',
+    name: 'DomainTypesPage',
+    component: () => import('~/components/DomainTypesPage/DomainTypesPage'),
     props: true,
     meta: {
       middleware: [auth],
-      title: "Теги доменов",
+      title: "Типы доменов",
       visible: true,
       rights: ['client', 'redactor', 'managing']
     }
   },
-
-  {
-    path: '/domains-tags-assign',
-    name: 'DomainTagsAssignPage',
-    component: () => import('~/components/DomainTagsAssignPage/DomainTagsAssignPage'),
-    props: true,
-    meta: {
-      middleware: [auth],
-      title: "Назначение тегов доменам",
-      visible: true,
-      rights: ['client', 'redactor', 'managing']
-    }
-  },
+    // {
+    //   path: '/domain-tags',
+    //   name: 'DomainTagsPage',
+    //   component: () => import('~/components/DomainTagsPage/DomainTagsPage'),
+    //   props: true,
+    //   meta: {
+    //     middleware: [auth],
+    //     title: "Теги доменов",
+    //     visible: false,
+    //     rights: ['client', 'redactor', 'managing']
+    //   }
+    // },
+    // {
+    //   path: '/domains-tags-assign',
+    //   name: 'DomainTagsAssignPage',
+    //   component: () => import('~/components/DomainTagsAssignPage/DomainTagsAssignPage'),
+    //   props: true,
+    //   meta: {
+    //     middleware: [auth],
+    //     title: "Назначение тегов доменам",
+    //     visible: true,
+    //     rights: ['client', 'redactor', 'managing']
+    //   }
+    // },
 
   {
     path: '/cdns',
