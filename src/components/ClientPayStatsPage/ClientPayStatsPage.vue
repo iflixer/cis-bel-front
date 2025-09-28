@@ -18,9 +18,9 @@
                         <div class="data-item__title">
                           <label class="form__label" style="padding:0">Период</label>
                         </div>
-                        <div class="data-item__data">
+                        <div class="data-item__data period-controls">
                           <el-select
-                              class="form__input"
+                              class="form__input period-select"
                               v-model="selectedPeriod"
                               value-key="value"
                               @change="onPeriodChange"
@@ -44,6 +44,7 @@
                             </template>
                           </el-select>
                           <el-button
+                              class="refresh-button"
                               type="primary"
                               @click="loadStats"
                               :loading="loading"
@@ -451,6 +452,30 @@ export default {
   font-size: 16px;
   margin: 0;
 }
+
+.period-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.period-select {
+  flex: 1;
+}
+
+.refresh-button {
+  flex-shrink: 0;
+}
+
+.period-select .el-input__inner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.period-select .el-input__inner::placeholder {
+  color: #c0c4cc !important;
+}
 </style>
 
 <style lang='scss'>
@@ -461,6 +486,12 @@ export default {
 .stat-search .el-select .el-input .el-input__inner {
   color: transparent;
   min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .stat-search .el-select .el-input.is-focus .el-input__inner {
@@ -469,6 +500,36 @@ export default {
   position: relative;
   z-index: 1;
   color: #969db7;
+}
+
+.stat-search .el-select .el-input .el-input__suffix {
+  display: flex;
+  align-items: center;
+}
+
+.stat-search .el-select .el-input .el-input__prefix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.stat-search .el-select .el-input .el-input__prefix .stat-select.prefix {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.stat-search .el-select .el-input .el-input__inner::placeholder {
+  text-align: center;
+  justify-content: center;
+  color: #c0c4cc;
 }
 
 .stat-select {
@@ -481,10 +542,14 @@ export default {
 .stat-select.stat-select-option {
   padding-top: 3px !important;
   padding-bottom: 3px !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .stat-select.stat-select-option-selected {
   padding-top: 4px !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .stat-select-title {
