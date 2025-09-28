@@ -208,6 +208,18 @@ export const routers = [
     }
   },
   {
+    path: '/client-pay-stats',
+    name: 'ClientPayStatsPage',
+    component: () => import('~/components/ClientPayStatsPage/ClientPayStatsPage'),
+    props: true,
+    meta: {
+      middleware: [auth],
+      title: "Статистика оплат",
+      visible: true,
+      rights: []
+    }
+  },
+  {
     path: '/ads',
     name: 'AdsPage',
     component: () => import('~/components/AdsPage/AdsPage'),
