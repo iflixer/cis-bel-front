@@ -77,7 +77,7 @@ const store = new Vuex.Store({
           if(data && data.operation === false){
             reject(data); 
           }else{
-            resolve({data, messages});
+            resolve(data);
           }
             
         })
