@@ -24,7 +24,8 @@
           placeholder="Введите значение типа домена (английскими буквами)"
           class="form__input"
           :maxlength="255"
-          show-word-limit>
+          show-word-limit
+          @input="disableAutoTransliteration">
         </el-input>
       </div>
     </form>
@@ -37,8 +38,11 @@
 </template>
 
 <script>
+import { transliterationMixin } from '~/utils/transliteration';
+
 export default {
   name: 'ModalFormAddType',
+  mixins: [transliterationMixin],
   props: {
     visible: {
       type: Boolean,
@@ -63,6 +67,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.setupAutoTransliteration('form.name', 'form.value');
+  },
   methods: {
     closeModal() {
       this.dialogVisible = false;
@@ -75,6 +82,7 @@ export default {
         name: '',
         value: ''
       };
+      this.enableAutoTransliteration();
     },
 
     submitForm() {

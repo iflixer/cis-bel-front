@@ -13,7 +13,8 @@
           placeholder="Введите название типа домена"
           class="form__input"
           :maxlength="255"
-          show-word-limit>
+          show-word-limit
+          @input="enableAutoTransliteration">
         </el-input>
       </div>
 
@@ -24,7 +25,8 @@
           placeholder="Введите значение типа домена (английскими буквами)"
           class="form__input"
           :maxlength="255"
-          show-word-limit>
+          show-word-limit
+          @input="disableAutoTransliteration">
         </el-input>
       </div>
     </form>
@@ -37,8 +39,11 @@
 </template>
 
 <script>
+import { transliterationMixin } from '~/utils/transliteration';
+
 export default {
   name: 'ModalFormUpdateType',
+  mixins: [transliterationMixin],
   props: {
     visible: {
       type: Boolean,
@@ -60,20 +65,31 @@ export default {
       }
     }
   },
+  mounted() {
+    this.setupAutoTransliteration('form.name', 'form.value');
+    if (this.visible && this.domainType) {
+      this.loadFormData();
+    }
+  },
   watch: {
     visible(newVal) {
       this.dialogVisible = newVal;
-      if (newVal && this.domainType) {
-        this.loadFormData();
+      if (newVal) {
+        this.$nextTick(() => {
+          this.loadFormData();
+        });
       }
     },
     domainType: {
       handler(newVal) {
         if (newVal && this.visible) {
-          this.loadFormData();
+          this.$nextTick(() => {
+            this.loadFormData();
+          });
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   methods: {
@@ -89,10 +105,11 @@ export default {
         name: '',
         value: ''
       };
+      this.disableAutoTransliteration();
     },
 
     loadFormData() {
-      if (this.domainType) {
+      if (this.domainType && this.domainType.id) {
         this.form = {
           id: this.domainType.id,
           name: this.domainType.name || '',
