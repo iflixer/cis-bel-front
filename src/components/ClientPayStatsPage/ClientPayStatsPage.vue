@@ -230,8 +230,8 @@ export default {
 
         const response = await this.postMethod("clientpaystats.get", params);
 
-        if (response && response.data) {
-          const rawSummary = response.data.summary || {
+        if (response) {
+          const rawSummary = response.summary || {
             total_views: 0,
             total_revenue: 0,
             avg_price_per_view: 0
@@ -243,9 +243,9 @@ export default {
             avg_price_per_view: this.convertCentsToUSD(rawSummary.avg_price_per_view)
           };
 
-          this.domainGeoBreakdown = this.processDomainGeoData(response.data.domain_breakdown || []);
-          if (response.data.available_periods) {
-            this.availablePeriods = response.data.available_periods;
+          this.domainGeoBreakdown = this.processDomainGeoData(response.domain_breakdown || []);
+          if (response.available_periods) {
+            this.availablePeriods = response.available_periods;
           }
         }
 
