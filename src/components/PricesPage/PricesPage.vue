@@ -39,7 +39,11 @@
                     <table class="price-matrix-table">
                       <thead>
                         <tr>
-                          <th class="matrix-header-corner">Регион / Тип домена</th>
+                          <th class="matrix-header-corner"></th>
+                          <th class="matrix-header-col" :colspan="domainTypes.length">Тип домена</th>
+                        </tr>
+                        <tr>
+                          <th class="matrix-row-header">Гео</th>
                           <th 
                             v-for="domainType in domainTypes" 
                             :key="domainType.domain_type_name"
