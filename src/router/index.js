@@ -220,6 +220,18 @@ export const routers = [
     }
   },
   {
+    path: '/admin-pay-stats',
+    name: 'AdminPayStatsPage',
+    component: () => import('~/components/AdminPayStatsPage/AdminPayStatsPage'),
+    props: true,
+    meta: {
+      middleware: [auth],
+      title: "Статистика оплат (Админ)",
+      visible: true,
+      rights: ['client', 'managing']
+    }
+  },
+  {
     path: '/ads',
     name: 'AdsPage',
     component: () => import('~/components/AdsPage/AdsPage'),
