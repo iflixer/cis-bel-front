@@ -184,6 +184,18 @@ export const routers = [
     }
   },
   {
+    path: '/domains',
+    name: 'DomainsPage',
+    component: () => import('~/components/DomainsPage/DomainsPage'),
+    props: true,
+    meta: {
+      middleware: [auth],
+      title: "Домены",
+      visible: true,
+      rights: ['client', 'redactor', 'managing']
+    }
+  },
+  {
     path: '/stats',
     name: 'StatsPage',
     component: () => import('~/components/StatsPage/StatsPage'),

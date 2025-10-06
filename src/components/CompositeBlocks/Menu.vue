@@ -273,6 +273,7 @@
   .VideoPage{  background: url(../../assets/images/svg-icons/VIDEO_CAMERA.svg) no-repeat center/ 40px; }
   .TiketsPage{ background: url(../../assets/images/svg-icons/MAIL.svg) no-repeat center/ 40px; }
   .UsersPage{ background: url(../../assets/images/svg-icons/SHARE.svg) no-repeat center/ 40px; }
+  .DomainsPage{ background: url(../../assets/images/svg-icons/SHARE.svg) no-repeat center/ 40px; }
   .StatsPage{ background: url(../../assets/images/svg-icons/STATISTICS.svg) no-repeat center/ 40px; }
   .ClientPayStatsPage{ background: url(../../assets/images/svg-icons/STAR.svg) no-repeat center/ 40px; }
   .AdminPayStatsPage{ background: url(../../assets/images/svg-icons/STATISTICS.svg) no-repeat center/ 40px; }
