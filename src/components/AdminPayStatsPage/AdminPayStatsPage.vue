@@ -314,6 +314,208 @@
                   </el-col>
                 </el-row>
 
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="24">
+                    <div class="stat__title">События просмотра</div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="6">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__data">{{ eventStats.load }}</div>
+                        <div class="data-item__title">Загрузка плеера</div>
+                      </div>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="6">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__data">{{ eventStats.play }}</div>
+                        <div class="data-item__title">Запуск воспроизведения</div>
+                      </div>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="6">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__data">{{ eventStats.p50 }}</div>
+                        <div class="data-item__title">Просмотр 50%</div>
+                      </div>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="6">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__data">{{ eventStats.p100 }}</div>
+                        <div class="data-item__title">Полный просмотр</div>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="24">
+                    <div class="stat__title">Конверсии</div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="5">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__data conversion-rate">{{ eventConversions.load_to_play }}%</div>
+                        <div class="data-item__title">Загрузка → Воспроизведение</div>
+                      </div>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="5">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__data conversion-rate">{{ eventConversions.play_to_p25 }}%</div>
+                        <div class="data-item__title">Воспроизведение → 25%</div>
+                      </div>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="5">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__data conversion-rate">{{ eventConversions.play_to_p50 }}%</div>
+                        <div class="data-item__title">Воспроизведение → 50%</div>
+                      </div>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="5">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__data conversion-rate">{{ eventConversions.play_to_p75 }}%</div>
+                        <div class="data-item__title">Воспроизведение → 75%</div>
+                      </div>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="4">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__data conversion-rate">{{ eventConversions.play_to_p100 }}%</div>
+                        <div class="data-item__title">Воспроизведение → 100%</div>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="24">
+                    <div class="stat__title">Все события (динамика)</div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="24">
+                    <div class="chart">
+                      <apexchart type="area" height="400" :options="chartOptions" :series="allEventsChartData"></apexchart>
+                    </div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="24">
+                    <div class="stat__title">События по типам</div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="12">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__title">Загрузка плеера</div>
+                      </div>
+                    </div>
+                    <div class="chart">
+                      <apexchart type="area" height="300" :options="chartOptions" :series="eventLoadChartData"></apexchart>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="12">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__title">Запуск воспроизведения</div>
+                      </div>
+                    </div>
+                    <div class="chart">
+                      <apexchart type="area" height="300" :options="chartOptions" :series="eventPlayChartData"></apexchart>
+                    </div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="12">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__title">Просмотр 1%</div>
+                      </div>
+                    </div>
+                    <div class="chart">
+                      <apexchart type="area" height="300" :options="chartOptions" :series="eventP1ChartData"></apexchart>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="12">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__title">Просмотр 25%</div>
+                      </div>
+                    </div>
+                    <div class="chart">
+                      <apexchart type="area" height="300" :options="chartOptions" :series="eventP25ChartData"></apexchart>
+                    </div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="12">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__title">Просмотр 50%</div>
+                      </div>
+                    </div>
+                    <div class="chart">
+                      <apexchart type="area" height="300" :options="chartOptions" :series="eventP50ChartData"></apexchart>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="12">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__title">Просмотр 75%</div>
+                      </div>
+                    </div>
+                    <div class="chart">
+                      <apexchart type="area" height="300" :options="chartOptions" :series="eventP75ChartData"></apexchart>
+                    </div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                  <el-col :span="24">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__title">Полный просмотр</div>
+                      </div>
+                    </div>
+                    <div class="chart">
+                      <apexchart type="area" height="300" :options="chartOptions" :series="eventP100ChartData"></apexchart>
+                    </div>
+                  </el-col>
+                </el-row>
+
               </div>
             </section>
           </div>
@@ -364,6 +566,34 @@ export default {
     },
 
     domainBreakdown: [],
+
+    eventStats: {
+      load: 0,
+      play: 0,
+      p1: 0,
+      p25: 0,
+      p50: 0,
+      p75: 0,
+      p100: 0
+    },
+
+    eventTimeSeries: {
+      load: [],
+      play: [],
+      p1: [],
+      p25: [],
+      p50: [],
+      p75: [],
+      p100: []
+    },
+
+    eventConversions: {
+      load_to_play: 0,
+      play_to_p25: 0,
+      play_to_p50: 0,
+      play_to_p75: 0,
+      play_to_p100: 0
+    },
 
     chartOptions: {
       chart: {
@@ -438,6 +668,84 @@ export default {
         name: 'Доход (USD)',
         data: this.timeSeries.revenue
       }];
+    },
+
+    eventLoadChartData() {
+      return [{
+        name: 'Загрузка плеера',
+        data: this.eventTimeSeries.load
+      }];
+    },
+
+    eventPlayChartData() {
+      return [{
+        name: 'Запуск воспроизведения',
+        data: this.eventTimeSeries.play
+      }];
+    },
+
+    eventP1ChartData() {
+      return [{
+        name: 'Просмотр 1%',
+        data: this.eventTimeSeries.p1
+      }];
+    },
+
+    eventP25ChartData() {
+      return [{
+        name: 'Просмотр 25%',
+        data: this.eventTimeSeries.p25
+      }];
+    },
+
+    eventP50ChartData() {
+      return [{
+        name: 'Просмотр 50%',
+        data: this.eventTimeSeries.p50
+      }];
+    },
+
+    eventP75ChartData() {
+      return [{
+        name: 'Просмотр 75%',
+        data: this.eventTimeSeries.p75
+      }];
+    },
+
+    eventP100ChartData() {
+      return [{
+        name: 'Полный просмотр',
+        data: this.eventTimeSeries.p100
+      }];
+    },
+
+    allEventsChartData() {
+      return [
+        {
+          name: 'Загрузка плеера',
+          data: this.eventTimeSeries.load
+        },
+        {
+          name: 'Запуск воспроизведения',
+          data: this.eventTimeSeries.play
+        },
+        {
+          name: 'Просмотр 25%',
+          data: this.eventTimeSeries.p25
+        },
+        {
+          name: 'Просмотр 50%',
+          data: this.eventTimeSeries.p50
+        },
+        {
+          name: 'Просмотр 75%',
+          data: this.eventTimeSeries.p75
+        },
+        {
+          name: 'Полный просмотр',
+          data: this.eventTimeSeries.p100
+        }
+      ];
     }
   },
 
@@ -505,6 +813,12 @@ export default {
           }
 
           this.domainBreakdown = response.domain_breakdown || [];
+
+          if (response.event_stats) {
+            this.eventStats = response.event_stats.summary || {};
+            this.eventTimeSeries = response.event_stats.time_series || {};
+            this.eventConversions = response.event_stats.conversions || {};
+          }
         }
 
         if (response && response.messages && response.messages.length > 0) {
@@ -719,6 +1033,10 @@ export default {
 
 .refresh-button {
   flex-shrink: 0;
+}
+
+.conversion-rate {
+  color: #67c23a;
 }
 </style>
 
