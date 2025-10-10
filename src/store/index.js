@@ -19,19 +19,38 @@ const store = new Vuex.Store({
   state: {
     messages: [],
     route: null,
-    apiURL: siteUrl
+    apiURL: siteUrl,
+    isNavigating: false
   },
   getters: {},
   mutations: {
     setRoute: (state, payload) => {
       state.route = payload;
     },
-    
+
     delMessages: (state, payload) => {
       state.messages.splice(state.messages.indexOf(payload), 1);
+    },
+
+    setNavigating: (state, payload) => {
+      state.isNavigating = payload;
     }
   },
   actions: {
+
+    safeNavigate: ({state, commit}, {name}) => {
+      if (state.isNavigating) return Promise.resolve();
+      if (router.currentRoute.name === name) return Promise.resolve();
+
+      commit('setNavigating', true);
+      return router.push({name}).catch(err => {
+        if (err.name !== 'NavigationDuplicated') {
+          throw err;
+        }
+      }).finally(() => {
+        commit('setNavigating', false);
+      });
+    },
 
     requestApi: ({state, dispatch, commit}, {url, data = null, method = 'POST'}) => {
       // console.log('Использование requestApi');
@@ -68,7 +87,7 @@ const store = new Vuex.Store({
               commit('setTokenRefresh', '');
               commit('setStatus', '');
               commit('setName', '');
-              router.push({name: 'Authorization'});
+              dispatch('safeNavigate', {name: 'Authorization'});
               reject(new Error('Authentication failed'));
               return;
             }
@@ -88,7 +107,7 @@ const store = new Vuex.Store({
             commit('setTokenRefresh', '');
             commit('setStatus', '');
             commit('setName', '');
-            router.push({name: 'Authorization'});
+            dispatch('safeNavigate', {name: 'Authorization'});
           }
           Notification({ type: 'error', title: 'Ошибка', message: error.message || error, customClass: 'messages-ui' });
           reject(error);
@@ -114,31 +133,39 @@ const store = new Vuex.Store({
   })]
 });
 
+let storageEventTimeout = null;
 window.addEventListener('storage', (e) => {
   if (e.key === 'vuex' && e.newValue) {
-    try {
-      const newState = JSON.parse(e.newValue);
-      if (newState.user) {
-        store.commit('setToken', newState.user.token || '');
-        store.commit('setTokenRefresh', newState.user.tokenRefresh || '');
-        store.commit('setStatus', newState.user.status || '');
-        store.commit('setName', newState.user.name || '');
-        
-        if (!newState.user.token && router.currentRoute.name !== 'Authorization') {
-          router.push({name: 'Authorization'});
-        }
-
-        else if (newState.user.token &&
-                (router.currentRoute.name === 'Authorization' || 
-                 router.currentRoute.name === 'Registration' ||
-                 router.currentRoute.name === 'ForgotPassword' ||
-                 router.currentRoute.name === 'ResetPassword')) {
-          router.push({name: 'AdminPanel'});
-        }
-      }
-    } catch (error) {
-      console.error('Error parsing storage event:', error);
+    if(storageEventTimeout){
+      clearTimeout(storageEventTimeout);
     }
+
+    storageEventTimeout = setTimeout(() => {
+      try {
+        const newState = JSON.parse(e.newValue);
+        if (newState.user) {
+          store.commit('setToken', newState.user.token || '');
+          store.commit('setTokenRefresh', newState.user.tokenRefresh || '');
+          store.commit('setStatus', newState.user.status || '');
+          store.commit('setName', newState.user.name || '');
+
+          const currentRoute = router.currentRoute.name;
+          if (!newState.user.token && currentRoute !== 'Authorization') {
+            store.dispatch('safeNavigate', {name: 'Authorization'});
+          }
+
+          else if (newState.user.token &&
+                  (currentRoute === 'Authorization' ||
+                   currentRoute === 'Registration' ||
+                   currentRoute === 'ForgotPassword' ||
+                   currentRoute === 'ResetPassword')) {
+            store.dispatch('safeNavigate', {name: 'AdminPanel'});
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing storage event:', error);
+      }
+    }, 300);
   }
 });
 

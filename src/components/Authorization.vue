@@ -35,7 +35,13 @@
       onSignIn () {
         const {login, password} = this;
         this.userLogin({login, password}).then(() => {
-          this.$router.go();
+          let mainPage = '';
+          if(this.$store.state.user.status == 'client' || this.$store.state.user.status == 'redactor'){
+            mainPage = 'VideoPage';
+          }else{
+            mainPage = 'AdminPanel';
+          }
+          this.$store.dispatch('safeNavigate', {name: mainPage});
         });
       },
 
