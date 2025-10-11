@@ -734,10 +734,6 @@ export default {
     allEventsChartData() {
       return [
         {
-          name: 'Загрузка плеера',
-          data: this.eventTimeSeries.load
-        },
-        {
           name: 'Запуск воспроизведения',
           data: this.eventTimeSeries.play
         },

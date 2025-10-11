@@ -87,7 +87,7 @@
                     <div class="stat__data">
                       <div class="data-item">
                         <div class="data-item__data">{{ summary.total_views }}</div>
-                        <div class="data-item__title">Всего просмотров</div>
+                        <div class="data-item__title">Всего платных просмотров</div>
                       </div>
                     </div>
                   </el-col>
