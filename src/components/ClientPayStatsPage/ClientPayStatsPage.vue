@@ -202,7 +202,7 @@ export default {
   }),
 
   async created() {
-    this.selectedPeriod = this.availablePeriods[0];
+    this.selectedPeriod = this.availablePeriods[2];
     await this.loadStats();
   },
 

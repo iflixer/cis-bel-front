@@ -47,14 +47,27 @@
             </div>
           </template>
 
-          <el-menu-item v-for="(subItem, subIndex) in artikles" :key="subIndex" :index="index+'-'+subIndex">
-            <a
-              :href="'/articles/'+ subItem.id" 
-              :class="{active: subItem.path == route}" 
-              class="menu__href">
-              <span class="menu__name" slot="title">{{ subItem.title }}</span>
-            </a>
-          </el-menu-item>
+          <div v-if="item.name === 'ArticlesPage'">
+            <el-menu-item v-for="(subItem, subIndex) in artikles" :key="subIndex" :index="index+'-'+subIndex">
+              <a
+                :href="'/articles/'+ subItem.id" 
+                :class="{active: subItem.path == route}" 
+                class="menu__href">
+                <span class="menu__name" slot="title">{{ subItem.title }}</span>
+              </a>
+            </el-menu-item>
+          </div>
+
+          <div v-if="item.name === 'DomainTypesPage'">
+            <el-menu-item v-for="(subItem, subIndex) in settingsRouters" :key="subIndex" :index="index+'-'+subIndex">
+              <a
+                :href="subItem.path" 
+                :class="{active: subItem.path == route}" 
+                class="menu__href">
+                <span class="menu__name" slot="title">{{ subItem.meta.title }}</span>
+              </a>
+            </el-menu-item>
+          </div>
           
         </el-submenu>
 
@@ -80,6 +93,36 @@
       isCollapse: true,
 
       artikles: null,
+      settingsRouters: [
+        {
+          path: '/domain-types',
+          name: 'DomainTypesPage',
+          meta: {
+            title: "Типы доменов",
+          }
+        },
+        {
+          path: '/geo-groups',
+          name: 'GeoGroupsPage',
+          meta: {
+            title: "Гео-группы",
+          }
+        },
+        {
+          path: '/prices',
+          name: 'PricesPage',
+          meta: {
+            title: "Управление ценами",
+          }
+        },
+        {
+          path: '/cdns',
+          name: 'CDNsPage',
+          meta: {
+            title: "Управление CDN",
+          }
+        },
+      ],
     }),
     async created() {
       this.getArtikles();
@@ -273,9 +316,8 @@
   .VideoPage{  background: url(../../assets/images/svg-icons/VIDEO_CAMERA.svg) no-repeat center/ 40px; }
   .TiketsPage{ background: url(../../assets/images/svg-icons/MAIL.svg) no-repeat center/ 40px; }
   .UsersPage{ background: url(../../assets/images/svg-icons/SHARE.svg) no-repeat center/ 40px; }
-  .DomainsPage{ background: url(../../assets/images/svg-icons/SHARE.svg) no-repeat center/ 40px; }
-  .StatsPage{ background: url(../../assets/images/svg-icons/STATISTICS.svg) no-repeat center/ 40px; }
-  .ClientPayStatsPage{ background: url(../../assets/images/svg-icons/STAR.svg) no-repeat center/ 40px; }
+  .DomainsPage{ background: url(../../assets/images/svg-icons/PLAY.svg) no-repeat center/ 40px; }
+  .ClientPayStatsPage{ background: url(../../assets/images/svg-icons/STATISTICS.svg) no-repeat center/ 40px; }
   .AdminPayStatsPage{ background: url(../../assets/images/svg-icons/STATISTICS.svg) no-repeat center/ 40px; }
   .AdsPage{ background: url(../../assets/images/svg-icons/STAR.svg) no-repeat center/ 40px; }
 
@@ -286,5 +328,6 @@
   .CDNsPage{ background: url(../../assets/images/svg-icons/SHARE.svg) no-repeat center/ 30px; }
   .GeoGroupsPage{ background: url(../../assets/images/svg-icons/BLANK.svg) no-repeat center/ 30px; }
   .PricesPage{ background: url(../../assets/images/svg-icons/STAR.svg) no-repeat center/ 30px; }
+  .DomainTypesPage{ background: url(../../assets/images/svg-icons/HAMBURGER_MENU.svg) no-repeat center/ 30px; }
 
 </style>

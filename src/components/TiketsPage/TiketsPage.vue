@@ -109,7 +109,7 @@
 
                         <div v-if="dataTiket != null && dataTiket.summ != null && dataTiket.dataCent != null && dataTiket.score != null">
 
-                          Сумма: {{ dataTiket.summ }}₽ | 
+                          Сумма: ${{ dataTiket.summ }} | 
 
                           <span v-if="dataTiket.cent == 'card'">Банковская карта</span>
                           <span v-if="dataTiket.cent == 'yandex'">Яндек кошелек</span>

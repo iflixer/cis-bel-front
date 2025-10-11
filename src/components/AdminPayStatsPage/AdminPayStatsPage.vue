@@ -204,7 +204,7 @@
                     <div class="stat__data">
                       <div class="data-item">
                         <div class="data-item__data">{{ summary.total_views }}</div>
-                        <div class="data-item__title">Всего просмотров</div>
+                        <div class="data-item__title">Всего платных просмотров</div>
                       </div>
                     </div>
                   </el-col>
@@ -221,95 +221,18 @@
                   <el-col :span="8">
                     <div class="stat__data">
                       <div class="data-item">
-                        <div class="data-item__data">{{ formatCurrency(summary.avg_price_per_view) }}</div>
-                        <div class="data-item__title">Средняя цена за 1К просмотров (USD)</div>
-                      </div>
-                    </div>
-                  </el-col>
-                </el-row>
-
-                <el-row type="flex" class="row-bg" v-if="timeSeries.views.length > 0">
-                  <el-col :span="24">
-                    <div class="stat__title">Динамика</div>
-                  </el-col>
-                </el-row>
-
-                <el-row type="flex" class="row-bg" v-if="timeSeries.views.length > 0">
-                  <el-col :span="12">
-                    <div class="stat__data">
-                      <div class="data-item">
-                        <div class="data-item__title">Просмотры</div>
-                      </div>
-                    </div>
-                    <div class="chart">
-                      <apexchart type="area" height="350" :options="chartOptions" :series="viewsChartData"></apexchart>
-                    </div>
-                  </el-col>
-
-                  <el-col :span="12">
-                    <div class="stat__data">
-                      <div class="data-item">
-                        <div class="data-item__title">Доход (USD)</div>
-                      </div>
-                    </div>
-                    <div class="chart">
-                      <apexchart type="area" height="350" :options="chartOptions" :series="revenueChartData"></apexchart>
-                    </div>
-                  </el-col>
-                </el-row>
-
-                <el-row type="flex" class="row-bg" v-if="domainBreakdown.length > 0">
-                  <el-col :span="24">
-                    <div class="stat__title">Детализация по доменам и географическим группам</div>
-                  </el-col>
-                </el-row>
-
-                <el-row type="flex" class="row-bg breakdown-section" v-if="domainBreakdown.length > 0">
-                  <el-col :span="20">
-                    <div v-for="domain in domainBreakdown" :key="domain.domain_id" class="domain-breakdown">
-                      <div class="domain-header">
-                        <h3>{{ domain.domain_name }}</h3>
-                        <div class="domain-summary">
-                          <span class="domain-user">{{ domain.user_name }}</span>
-                          <span class="domain-views">{{ domain.total_views }} просмотров</span>
-                          <span class="domain-price">{{ formatCurrency(domain.avg_watch_price / 100) }}/1K</span>
-                          <span class="domain-sum">{{ formatCurrency(domain.total_revenue / 100) }}</span>
+                        <div class="data-item__title">Группы по цене за 1К просмотров</div>
+                        <div class="price-groups">
+                          <div v-for="group in summary.price_groups" :key="group.watch_price" class="price-group-item">
+                            <span class="price-value">{{ formatCurrency(group.watch_price / 100) }}/1K:</span>
+                            <span class="revenue-value">{{ formatCurrency(group.total_revenue / 100) }}</span>
+                            <span class="events-value">({{ group.total_views }} просмотров)</span>
+                          </div>
+                          <div v-if="!summary.price_groups || summary.price_groups.length === 0" class="no-price-data">
+                            Нет данных по ценам
+                          </div>
                         </div>
                       </div>
-
-                      <div class="geo-breakdown-table" v-if="domain.geo_groups.length > 0">
-                        <el-table :data="domain.geo_groups" style="width: 100%">
-                          <el-table-column prop="geo_group_name" label="Географическая группа" min-width="150"></el-table-column>
-                          <el-table-column prop="views" label="Просмотры" width="150" sortable></el-table-column>
-                          <el-table-column
-                            prop="watch_price"
-                            label="Цена за 1К просмотров"
-                            width="280"
-                            sortable
-                            :formatter="(row) => formatCurrency(row.watch_price / 100)">
-                          </el-table-column>
-                          <el-table-column
-                            prop="revenue"
-                            label="Сумма (USD)"
-                            width="150"
-                            sortable
-                            :formatter="(row) => formatCurrency(row.revenue / 100)">
-                          </el-table-column>
-                        </el-table>
-                      </div>
-
-                      <div v-if="domain.geo_groups.length === 0" class="no-geo-data">
-                        <p>Нет данных по географическим группам для этого домена</p>
-                      </div>
-                    </div>
-                  </el-col>
-                </el-row>
-
-                <el-row type="flex" class="row-bg" v-if="domainBreakdown.length === 0 && !loading">
-                  <el-col :span="24">
-                    <div class="no-data-message">
-                      <i class="el-icon-info"></i>
-                      <p>Нет данных для отображения в выбранном периоде</p>
                     </div>
                   </el-col>
                 </el-row>
@@ -411,6 +334,92 @@
                   </el-col>
                 </el-row>
 
+                <el-row type="flex" class="row-bg" v-if="timeSeries.views.length > 0">
+                  <el-col :span="24">
+                    <div class="stat__title">Динамика</div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg" v-if="timeSeries.views.length > 0">
+                  <el-col :span="12">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__title">Просмотры</div>
+                      </div>
+                    </div>
+                    <div class="chart">
+                      <apexchart type="area" height="350" :options="chartOptions" :series="viewsChartData"></apexchart>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="12">
+                    <div class="stat__data">
+                      <div class="data-item">
+                        <div class="data-item__title">Доход (USD)</div>
+                      </div>
+                    </div>
+                    <div class="chart">
+                      <apexchart type="area" height="350" :options="chartOptions" :series="revenueChartData"></apexchart>
+                    </div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg" v-if="domainBreakdown.length > 0">
+                  <el-col :span="24">
+                    <div class="stat__title">Детализация по доменам и географическим группам</div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg breakdown-section" v-if="domainBreakdown.length > 0">
+                  <el-col :span="20">
+                    <div v-for="domain in domainBreakdown" :key="domain.domain_id" class="domain-breakdown">
+                      <div class="domain-header">
+                        <h3>{{ domain.domain_name }}</h3>
+                        <div class="domain-summary">
+                          <span class="domain-user">{{ domain.user_name }}</span>
+                          <span class="domain-views">{{ domain.total_views }} просмотров</span>
+                          <span class="domain-price">{{ formatCurrency(domain.avg_watch_price / 100) }}/1K</span>
+                          <span class="domain-sum">{{ formatCurrency(domain.total_revenue / 100) }}</span>
+                        </div>
+                      </div>
+
+                      <div class="geo-breakdown-table" v-if="domain.geo_groups.length > 0">
+                        <el-table :data="domain.geo_groups" style="width: 100%">
+                          <el-table-column prop="geo_group_name" label="Географическая группа" min-width="150"></el-table-column>
+                          <el-table-column prop="views" label="Просмотры" width="150" sortable></el-table-column>
+                          <el-table-column
+                            prop="watch_price"
+                            label="Цена за 1К просмотров"
+                            width="280"
+                            sortable
+                            :formatter="(row) => formatCurrency(row.watch_price / 100)">
+                          </el-table-column>
+                          <el-table-column
+                            prop="revenue"
+                            label="Сумма (USD)"
+                            width="150"
+                            sortable
+                            :formatter="(row) => formatCurrency(row.revenue / 100)">
+                          </el-table-column>
+                        </el-table>
+                      </div>
+
+                      <div v-if="domain.geo_groups.length === 0" class="no-geo-data">
+                        <p>Нет данных по географическим группам для этого домена</p>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg" v-if="domainBreakdown.length === 0 && !loading">
+                  <el-col :span="24">
+                    <div class="no-data-message">
+                      <i class="el-icon-info"></i>
+                      <p>Нет данных для отображения в выбранном периоде</p>
+                    </div>
+                  </el-col>
+                </el-row>
+
                 <el-row type="flex" class="row-bg">
                   <el-col :span="24">
                     <div class="stat__title">Все события (динамика)</div>
@@ -507,11 +516,11 @@
                   <el-col :span="24">
                     <div class="stat__data">
                       <div class="data-item">
-                        <div class="data-item__title">Полный просмотр</div>
+                        <div class="data-item__title">Загрузки плеера по гео-группам</div>
                       </div>
                     </div>
                     <div class="chart">
-                      <apexchart type="area" height="300" :options="chartOptions" :series="eventP100ChartData"></apexchart>
+                      <apexchart type="area" height="300" :options="chartOptions" :series="geoGroupLoadChartData"></apexchart>
                     </div>
                   </el-col>
                 </el-row>
@@ -557,7 +566,7 @@ export default {
     summary: {
       total_views: 0,
       total_revenue: 0,
-      avg_price_per_view: 0
+      price_groups: []
     },
 
     timeSeries: {
@@ -595,10 +604,16 @@ export default {
       play_to_p100: 0
     },
 
+    geoGroupLoadStats: [],
+
     chartOptions: {
       chart: {
         height: 350,
-        type: 'area'
+        type: 'area',
+        zoom: {
+          enabled: true,
+          allowMouseWheelZoom: false
+        }
       },
       theme: {
         palette: 'palette1'
@@ -640,7 +655,7 @@ export default {
     this.selectedUser = { id: 'all', login: 'Все пользователи' };
     this.selectedDomain = { id: 'all', name: 'Все домены' };
     this.selectedGeoGroup = { id: 'all', name: 'Все гео группы' };
-    this.selectedPeriod = this.availablePeriods[0];
+    this.selectedPeriod = this.availablePeriods[2];
     await this.loadStats();
   },
 
@@ -712,11 +727,8 @@ export default {
       }];
     },
 
-    eventP100ChartData() {
-      return [{
-        name: 'Полный просмотр',
-        data: this.eventTimeSeries.p100
-      }];
+    geoGroupLoadChartData() {
+      return this.geoGroupLoadStats;
     },
 
     allEventsChartData() {
@@ -796,13 +808,13 @@ export default {
           const rawSummary = response.summary || {
             total_views: 0,
             total_revenue: 0,
-            avg_price_per_view: 0
+            price_groups: []
           };
 
           this.summary = {
             total_views: rawSummary.total_views,
             total_revenue: this.convertCentsToUSD(rawSummary.total_revenue),
-            avg_price_per_view: this.convertCentsToUSD(rawSummary.avg_price_per_view)
+            price_groups: rawSummary.price_groups || []
           };
 
           if (response.time_series) {
@@ -818,6 +830,10 @@ export default {
             this.eventStats = response.event_stats.summary || {};
             this.eventTimeSeries = response.event_stats.time_series || {};
             this.eventConversions = response.event_stats.conversions || {};
+          }
+
+          if (response.geo_group_load_stats) {
+            this.geoGroupLoadStats = response.geo_group_load_stats;
           }
         }
 
@@ -1037,6 +1053,47 @@ export default {
 
 .conversion-rate {
   color: #67c23a;
+}
+
+.price-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.price-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 2px 0;
+  gap: 8px;
+}
+
+.price-value {
+  color: #67c23a;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.revenue-value {
+  color: #409eff;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.events-value {
+  color: #909399;
+  font-size: 11px;
+  margin-left: auto;
+}
+
+.no-price-data {
+  color: #999;
+  font-size: 12px;
+  font-style: italic;
 }
 </style>
 

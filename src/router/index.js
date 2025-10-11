@@ -196,30 +196,6 @@ export const routers = [
     }
   },
   {
-    path: '/stats',
-    name: 'StatsPage',
-    component: () => import('~/components/StatsPage/StatsPage'),
-    props: true,
-    meta: {
-      middleware: [auth],
-      title: "Статистика",
-      visible: true,
-      rights: []
-    }
-  },
-  {
-    path: '/stats/user/:user_id',
-    name: 'UserStatsPage',
-    component: () => import('~/components/StatsPage/StatsPage'),
-    props: true,
-    meta: {
-      middleware: [auth],
-      title: "Статистика пользователя",
-      visible: false,
-      rights: []
-    }
-  },
-  {
     path: '/client-pay-stats',
     name: 'ClientPayStatsPage',
     component: () => import('~/components/ClientPayStatsPage/ClientPayStatsPage'),
@@ -278,9 +254,11 @@ export const routers = [
     props: true,
     meta: {
       middleware: [auth],
-      title: "Типы доменов",
+      title: "Настройки",
       visible: true,
-      rights: ['client', 'redactor', 'managing']
+      rights: ['client', 'redactor', 'managing'],
+      type: 'sub',
+      access: ['redactor','administrator']
     }
   },
     // {
@@ -316,7 +294,7 @@ export const routers = [
     meta: {
       middleware: [auth],
       title: "Управление CDN",
-      visible: true,
+      visible: false,
       rights: ['client', 'redactor', 'managing']
     }
   },
@@ -329,7 +307,7 @@ export const routers = [
     meta: {
       middleware: [auth],
       title: "Гео-группы",
-      visible: true,
+      visible: false,
       rights: ['client', 'redactor', 'managing']
     }
   },
@@ -342,7 +320,7 @@ export const routers = [
     meta: {
       middleware: [auth],
       title: "Управление ценами",
-      visible: true,
+      visible: false,
       rights: ['client', 'redactor', 'managing']
     }
   },

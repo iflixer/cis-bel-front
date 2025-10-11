@@ -226,7 +226,7 @@
                     <el-row :gutter="20" style="display:flex;align-items:center">
                       <el-col :span="8">
                         <h3 class="cabinet__title-rang">Баланс</h3>
-                        <p>{{ score }} ₽</p>
+                        <p>${{ score }}</p>
                       </el-col>
                       <el-col :span="8">
                         <button class="form__button" @click="centOutForm = true">Вывести</button>
