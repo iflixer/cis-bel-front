@@ -77,11 +77,23 @@
                   <el-table-column
                     prop="domain_type_name"
                     label="Тип домена"
-                    width="180"
+                    width="200"
                     sortable="custom">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.domain_type_name">{{ scope.row.domain_type_name }}</span>
-                      <span v-else class="text-muted">—</span>
+                      <el-select
+                        v-model="scope.row.domain_type_id"
+                        placeholder="Не выбран"
+                        size="small"
+                        clearable
+                        @change="handleDomainTypeChange(scope.row)"
+                        style="width: 100%;">
+                        <el-option
+                          v-for="type in domainTypes"
+                          :key="type.id"
+                          :label="type.name"
+                          :value="type.id">
+                        </el-option>
+                      </el-select>
                     </template>
                   </el-table-column>
 
@@ -133,6 +145,7 @@
       searchDomain: '',
       usersList: [],
       domainNamesList: [],
+      domainTypes: [],
       paginCount: 20,
       page: 1,
       orderBy: 'id',
@@ -143,6 +156,7 @@
         this.page = Number(/page.*?(\d+)/.exec( window.location.hash )[1]);
       }
       await this.loadFilterOptions();
+      await this.loadDomainTypes();
       this.domainsGet(this.page);
     },
 
@@ -166,6 +180,16 @@
           const uniqueDomains = [...new Set(response.items.map(item => item.name))];
           this.domainNamesList = uniqueDomains.filter(domain => domain).sort();
         });
+      },
+
+      async loadDomainTypes(){
+        try {
+          const response = await this.postMethod('domaintypes.getAll');
+          this.domainTypes = response || [];
+        } catch (error) {
+          console.error('Error fetching domain types:', error);
+          this.domainTypes = [];
+        }
       },
 
       clearFilter(){
@@ -202,6 +226,34 @@
           this.count = response.count;
           this.domainsList = response.items;
         });
+      },
+
+      async handleDomainTypeChange(row){
+        try {
+          const params = {
+            domain_id: row.id,
+            domain_type_id: row.domain_type_id || null
+          };
+
+          const response = await this.postMethod('domains.updateDomainType', params);
+
+          if (response && response.domain_type_name !== undefined) {
+            row.domain_type_name = response.domain_type_name;
+          }
+
+          this.$message({
+            type: 'success',
+            message: 'Тип домена успешно обновлен'
+          });
+        } catch (error) {
+          console.error('Error updating domain type:', error);
+          this.$message({
+            type: 'error',
+            message: 'Ошибка при обновлении типа домена'
+          });
+
+          this.domainsGet(this.page);
+        }
       },
 
     }
