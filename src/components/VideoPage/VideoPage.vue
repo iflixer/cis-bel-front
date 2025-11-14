@@ -43,6 +43,10 @@
                     <i class="icon el-icon-video-camera"></i>
                     Фильмы
                   </a>
+                  <a href="/video/cartoons" :class="{ activ: type == 'cartoons'}" class="section__title-button-lin">
+                    <i class="icon el-icon-picture"></i>
+                    Мультфильмы
+                  </a>
                   <a href="/video/serials" :class="{ activ: type == 'serials'}" class="section__title-button-lin">
                     <i class="icon el-icon-film"></i>
                     Сериалы
@@ -120,6 +124,7 @@
                       <!-- <i class="el-icon-video-camera"></i> -->
                       <!-- <i class="el-icon-film"></i> -->
                       <div class="tag tag-border tag--icon" v-if="scope.row.tupe == 'movie'" title="фильм">Fi</div>
+                      <div class="tag tag-border tag--icon" v-if="scope.row.tupe == 'cartoon'" title="мультфильм">Mu</div>
                       <div class="tag tag-border tag--icon" v-else title="сериал">Se</div>
                     
                     </template>
@@ -329,6 +334,8 @@
       if(this.type == 'films'){
         // this.filter = {};
         this.filter.type = 'movie';
+      }else if(this.type == 'cartoons'){
+        this.filter.type = 'cartoon';
       }else if(this.type == 'serials'){
         // this.filter = {};
         this.filter.type = 'episode';

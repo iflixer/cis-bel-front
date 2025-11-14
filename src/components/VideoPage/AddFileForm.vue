@@ -191,7 +191,7 @@
         this.ad.id = this.data.id;
         this.ad.type = this.data.tupe;
 
-        if (this.data.tupe == 'movie') {
+        if (this.data.tupe == 'movie' || this.data.tupe == 'cartoon') {
           this.ad.season = null;
           this.ad.episode = null;
         }

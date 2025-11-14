@@ -9,6 +9,7 @@
     <el-radio-group size="small" v-model="ad.type">
       <el-radio-button label="movie">Фильм</el-radio-button>
       <el-radio-button label="episode">Сериал</el-radio-button>
+      <el-radio-button label="cartoon">Мультфильм</el-radio-button>
     </el-radio-group>
 
     <label class="form__label">Качество</label>
