@@ -1,7 +1,7 @@
 <template>
   <div class="form-main">
     <div class="form-in">
-      <h1><a href="/">CDNHub</a></h1>
+      <h1><a href="/">FLIXcdn</a></h1>
       <p>Смена пароля</p>
       <input type="password" class="form-control" v-model="password" placeholder="Новый пароль">
       <input type="password" class="form-control" v-model="passwordConfirm" placeholder="Повторите пароль">

@@ -1,7 +1,7 @@
 <template>
   <div class="form-main">
     <div class="form-in">
-      <h1><a href="/">CDNHub</a></h1>
+      <h1><a href="/">FLIXcdn</a></h1>
       <p>Регистрация</p>
 
       <input type="text" class="form-control" name="login" v-model="login" placeholder="Логин">
