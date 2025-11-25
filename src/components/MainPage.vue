@@ -2,7 +2,7 @@
   <div class="mainpage">
 
     <header class="landing-heder">
-        <div class="logo">CDNHub</div>
+        <div class="logo">FLIXcdn</div>
         <div class="panel">
             <a href="/login">Вход</a>
         </div>
