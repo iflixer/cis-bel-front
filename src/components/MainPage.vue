@@ -25,7 +25,7 @@
 
     <footer class="landing-footer">
         <div>Все права защищены</div>
-        <div>v1.0 cdnhub.pro 2025 ©</div>
+        <div>v1.0 flixcdn.live 2025 ©</div>
     </footer>
 
   </div>
