@@ -411,7 +411,7 @@
         // let link = `https://${this.userInfo.domain}/show/${id}`;
         // let link = `https://cdn0.cloudcdn.xyz/show/${id}`;
 
-        let link = `https://cdn0.cdnhub.help/show/${id}`;
+        let link = `https://player0.flixcdn.space/show/${id}`;
         if (window.location.hostname.includes('.local')) {
           link = `https://nginx.cis-bel-back.orb.local/show/${id}?domain=nginx.cis-bel-back.orb.local`
         }

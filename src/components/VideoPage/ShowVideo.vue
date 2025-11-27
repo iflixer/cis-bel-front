@@ -23,7 +23,7 @@
         if (window.location.hostname.includes('.local')) {
           return 'https://nginx.cis-bel-back.orb.local'
         }
-        return 'https://cdn0.cdnhub.help'
+        return 'https://player0.flixcdn.space'
       }
     },
     components: {
