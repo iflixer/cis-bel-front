@@ -1,7 +1,7 @@
 <template>
   <div class="form-main">
     <div class="form-in">
-      <h1><a href="/">FLIXcdn</a></h1>
+      <h1><a href="/">FlixCDN</a></h1>
       <input type="text" v-model="login" placeholder="Логин">
       <input type="password" v-model="password" placeholder="Пароль">
       <button v-on:click="onSignIn()">Войти</button>

@@ -1,7 +1,7 @@
 <template>
   <div class="form-main">
     <div class="form-in">
-      <h1><a href="/">FLIXcdn</a></h1>
+      <h1><a href="/">FlixCDN</a></h1>
       <p>Восстановление пароля</p>
       <input type="email" class="form-control" name="email" v-model="email" placeholder="E-mail">
       <button :class="{dis: starFlag}" v-on:click="onForgotPassword()">Восстановить</button>

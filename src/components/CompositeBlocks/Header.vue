@@ -5,7 +5,7 @@
       <!-- Modals -->
       <tiket-modal :visible.sync="tiketFlag" :type="tiketType" @close="closeForm()"></tiket-modal>
 
-      <h2 class="header__title">FLIXcdn</h2>
+      <h2 class="header__title">FlixCDN</h2>
       <ul class="header__menu">
         <li class="header__item">
           <a 

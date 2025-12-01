@@ -6,6 +6,7 @@ import store from '~/store';
 import middlewarePipeline from './middlewarePipeline';
 import auth from './middleware/auth';
 import guest from './middleware/guest';
+import home from './middleware/home';
 
 
 Vue.use(Router);
@@ -17,6 +18,7 @@ export const routers = [
     name: 'MainPage',
     component: () => import('~/components/MainPage'),
     meta: {
+      middleware: [home],
       visible: false
     }
   },
