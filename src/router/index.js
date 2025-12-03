@@ -152,7 +152,7 @@ export const routers = [
     props: true,
     meta: {
       middleware: [auth],
-      title: "Статьи",
+      title: "Документация",
       visible: true,
       rights: [],
       type: 'sub',

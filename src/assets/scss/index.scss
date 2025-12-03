@@ -39,10 +39,16 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: stretch;
+
+    > div {
+      flex: 1;
+      min-width: 0;
+    }
   }
 
   main{
-    width: calc(100vw - 80px);
+    flex: 1;
+    min-width: 0;
     height: calc(100vh - 80px);
     background: #eff3f6;
     display: flex;
@@ -77,9 +83,6 @@
   }
 
   @media all and (min-width: 1440px) {
-    main{
-      width: calc(100vw - 80px);
-    }
     .main{
       padding: 0 60px;
     }

@@ -1,5 +1,5 @@
 <template>
-	<menu>
+	<menu :class="{ 'menu--expanded': !isCollapse }">
 
 		<!--  @open="handleOpen" @close="handleClose" -->
 		<el-menu default-active="2" class="el-menu-vertical" :collapse="isCollapse">
@@ -90,7 +90,7 @@
     name: 'Menu',
     data: () => ({
       data: [],
-      isCollapse: true,
+      isCollapse: false,
 
       artikles: null,
       settingsRouters: [
@@ -207,6 +207,11 @@
     width: 80px;
     // background: #323232;
     color: #fff;
+    flex-shrink: 0;
+
+    &.menu--expanded {
+      width: 300px;
+    }
   }
 
   .el-menu-vertical{
@@ -217,7 +222,7 @@
     .el-menu-item:hover{ background-color: transparent;}
 
     &:not(.el-menu--collapse) {
-        width: 250px;
+        width: 300px;
     }
 
     .menu__item{ 
@@ -291,6 +296,10 @@
           letter-spacing: 0.02em;
           line-height: 30px;
           color: #000000;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 250px;
         }
       }
     }
