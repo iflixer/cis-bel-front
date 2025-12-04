@@ -12,6 +12,7 @@
         <SystemMessages></SystemMessages>
       </template>
     </router-view>
+    <TawkChat />
 
   </div>
 </template>
@@ -20,13 +21,15 @@
   import SystemMessages from '~/components/CompositeBlocks/SystemMessages';
   import Header from '~/components/CompositeBlocks/Header';
   import Menu from '~/components/CompositeBlocks/Menu';
+  import TawkChat from '~/components/CompositeBlocks/TawkChat';
 
   export default {
     name: 'App',
     components: {
       SystemMessages,
       Header,
-      Menu
+      Menu,
+      TawkChat
     },
 
     created(){
