@@ -14,6 +14,15 @@ export default {
     isAuthenticated() {
       const token = this.$store.state.user.token;
       return token && token.trim() !== '';
+    },
+    userName() {
+      return this.$store.state.user.name;
+    },
+    userEmail() {
+      return this.$store.state.user.email;
+    },
+    userTawkHash() {
+      return this.$store.state.user.tawkHash;
     }
   },
   watch: {
@@ -38,6 +47,17 @@ export default {
       if (this.scriptLoaded) return;
 
       window.Tawk_API = window.Tawk_API || {};
+      const userName = this.userName;
+      const userEmail = this.userEmail;
+      const userHash = this.userTawkHash;
+      if (userName && userName.trim() !== '' && userEmail && userEmail.trim() !== '') {
+        window.Tawk_API.visitor = {
+          name: userName,
+          email: userEmail,
+          hash: userHash
+        };
+        console.log('[TawkChat] Set visitor:', window.Tawk_API.visitor);
+      }
       window.Tawk_LoadStart = new Date();
 
       const s1 = document.createElement('script');

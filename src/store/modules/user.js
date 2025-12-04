@@ -4,6 +4,8 @@ export default {
     tokenRefresh: '',
     status: '',
     name: '',
+    email: '',
+    tawkHash: '',
     isRefreshingToken: false,
     lastAuthCheck: null,
     authCheckCache: false
@@ -26,6 +28,12 @@ export default {
     setName(state, payload){
         state.name = payload;
     },
+    setEmail(state, payload){
+        state.email = payload;
+    },
+    setTawkHash(state, payload){
+        state.tawkHash = payload;
+    },
     setRefreshingToken(state, payload){
         state.isRefreshingToken = payload;
     },
@@ -39,11 +47,13 @@ export default {
     userRegistr: ({commit, dispatch}, user) => {
       return new Promise((resolve) => {
         dispatch('requestApi', {url: 'oauth/registr', data: user})
-        .then(({bearer_token, refresh_token, right, name}) => {
+        .then(({bearer_token, refresh_token, right, name, email, tawkHash}) => {
           commit('setToken', bearer_token);
           commit('setTokenRefresh', refresh_token);
           commit('setStatus', right);
           commit('setName', name);
+          commit('setEmail', email);
+          commit('setTawkHash', tawkHash);
           resolve();
         }).catch((error) => {
           console.log(error);
@@ -84,11 +94,16 @@ export default {
     userLogin: ({commit, dispatch}, user) => {
       return new Promise((resolve) => {
         dispatch('requestApi', {url: 'oauth/login', data: user})
-        .then(({bearer_token, refresh_token, right, name}) => {
+        .then((response) => {
+          console.log('[userLogin] Full API response:', response);
+          const {bearer_token, refresh_token, right, name, email, tawkHash} = response;
+          console.log('[userLogin] name:', name, 'email:', email, 'tawkHash:', tawkHash);
           commit('setToken', bearer_token);
           commit('setTokenRefresh', refresh_token);
           commit('setStatus', right);
           commit('setName', name);
+          commit('setEmail', email);
+          commit('setTawkHash', tawkHash);
           resolve();
         }).catch((error) => {
           console.log(error);
@@ -104,6 +119,8 @@ export default {
             commit('setTokenRefresh', '');
             commit('setStatus', '');
             commit('setName', '');
+            commit('setEmail', '');
+            commit('setTawkHash', '');
             resolve();
           }).catch((error) => {
             console.log(error);
@@ -135,6 +152,9 @@ export default {
         try{
           const response = await dispatch('requestApi', {url: 'oauth/token', data: {token: state.tokenRefresh}});
           commit('setToken', response.bearer_token);
+          if(response.name) commit('setName', response.name);
+          if(response.email) commit('setEmail', response.email);
+          if(response.tawkHash) commit('setTawkHash', response.tawkHash);
           commit('setAuthCheckCache', true);
           return true;
         }catch(e){
