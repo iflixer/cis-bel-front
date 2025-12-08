@@ -335,7 +335,7 @@ export const routers = [
     meta: {
       middleware: [auth],
       title: "VideoTouch",
-      visible: true,
+      visible: false,
       rights: ['client', 'redactor', 'managing']
     }
   },

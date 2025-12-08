@@ -122,6 +122,13 @@
             title: "Управление CDN",
           }
         },
+        {
+          path: '/videotouch',
+          name: 'VideoTouchPage',
+          meta: {
+            title: "Video Sync",
+          }
+        },
       ],
     }),
     async created() {
