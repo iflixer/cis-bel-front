@@ -327,6 +327,19 @@ export const routers = [
     }
   },
 
+  {
+    path: '/videotouch',
+    name: 'VideoTouchPage',
+    component: () => import('~/components/VideoTouchPage/VideoTouchPage'),
+    props: true,
+    meta: {
+      middleware: [auth],
+      title: "VideoTouch",
+      visible: true,
+      rights: ['client', 'redactor', 'managing']
+    }
+  },
+
 
   {
     path: '/*',

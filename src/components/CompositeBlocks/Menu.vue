@@ -338,5 +338,6 @@
   .GeoGroupsPage{ background: url(../../assets/images/svg-icons/BLANK.svg) no-repeat center/ 30px; }
   .PricesPage{ background: url(../../assets/images/svg-icons/STAR.svg) no-repeat center/ 30px; }
   .DomainTypesPage{ background: url(../../assets/images/svg-icons/HAMBURGER_MENU.svg) no-repeat center/ 30px; }
+  .VideoTouchPage{ background: url(../../assets/images/svg-icons/VIDEO_CAMERA.svg) no-repeat center/ 40px; }
 
 </style>
