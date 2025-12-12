@@ -67,6 +67,7 @@
                           <el-checkbox v-model="form.enrichments.thetvdb">TheTVDB</el-checkbox>
                           <el-checkbox v-model="form.enrichments.fanart">Fanart</el-checkbox>
                           <el-checkbox v-model="form.enrichments.openai">OpenAI</el-checkbox>
+                          <el-checkbox v-model="form.enrichments.kinopoiskdev">KinopoiskDev</el-checkbox>
                         </div>
                       </div>
                     </el-col>
@@ -242,7 +243,8 @@ export default {
         tmdb: true,
         thetvdb: false,
         fanart: true,
-        openai: false
+        openai: false,
+        kinopoiskdev: false
       },
       forceImport: false
     },
