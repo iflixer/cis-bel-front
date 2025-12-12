@@ -129,6 +129,13 @@
             title: "Video Sync",
           }
         },
+        {
+          path: '/blacklist',
+          name: 'BlacklistPage',
+          meta: {
+            title: "Черный список",
+          }
+        },
       ],
     }),
     async created() {

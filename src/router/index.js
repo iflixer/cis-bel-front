@@ -340,6 +340,19 @@ export const routers = [
     }
   },
 
+  {
+    path: '/blacklist',
+    name: 'BlacklistPage',
+    component: () => import('~/components/BlacklistPage/BlacklistPage'),
+    props: true,
+    meta: {
+      middleware: [auth],
+      title: "Черный список видео",
+      visible: false,
+      rights: ['client', 'redactor', 'managing']
+    }
+  },
+
 
   {
     path: '/*',
