@@ -98,6 +98,16 @@
                   </el-table-column>
 
                   <el-table-column
+                    prop="loads_24h"
+                    label="Загрузки 24ч"
+                    width="130"
+                    sortable="custom">
+                    <template slot-scope="scope">
+                      {{ scope.row.loads_24h || 0 }}
+                    </template>
+                  </el-table-column>
+
+                  <el-table-column
                     prop="status"
                     label="Статус"
                     width="150"
