@@ -60,6 +60,7 @@
                           <div class="tikets-s__item-prev-message">
                             {{ value.message.name }}: {{ value.message.message }}
                           </div>
+                          <div class="tikets-s__item-date">{{ value.message.created_at }}</div>
                         </div>
                         <div v-if="tiketsList && tiketsList.length == 0" style="text-align:center">Данных нет</div>
                         
@@ -218,7 +219,12 @@
           close: this.pageTikets,
           tupe: type
         }).then( response => {
-          this.tiketsList = response;
+          this.tiketsList = response.map(el => {
+            if(el.message && el.message.created_at) {
+              el.message.created_at = this.getDataS(el.message.created_at);
+            }
+            return el;
+          });
         });
       },
 
@@ -360,14 +366,12 @@
 
       getDataS: function(string){
         let data = new Date(Date.parse(string));
-        let stringData = data.getFullYear();
-
-        stringData += '.' + (data.getMonth() + 1);
-        stringData += '.' + (data.getDate());
-        stringData += ' ' + (data.getHours());
-        stringData += ':' + (data.getMinutes());
-
-        return stringData;
+        let day = String(data.getDate()).padStart(2, '0');
+        let month = String(data.getMonth() + 1).padStart(2, '0');
+        let year = data.getFullYear();
+        let hours = String(data.getHours()).padStart(2, '0');
+        let minutes = String(data.getMinutes()).padStart(2, '0');
+        return `${day}.${month}.${year} ${hours}:${minutes}`;
       }
         
     }
@@ -472,8 +476,11 @@
 
   
   .tikets-s__item-prev-message{}
-
-
+  .tikets-s__item-date{
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+  }
 
   .tikets-s__mes-item{
       padding: 15px 0;
