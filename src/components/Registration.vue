@@ -6,6 +6,7 @@
 
       <input type="text" class="form-control" name="login" v-model="login" placeholder="Логин">
       <input type="email" class="form-control" name="email" v-model="email" placeholder="E-mail">
+      <input type="text" class="form-control" name="contact_telegram" v-model="contact_telegram" placeholder="Telegram (для обратной связи)">
       <input type="password" class="form-control" v-model="password" placeholder="Пароль">
       <input type="password" class="form-control" v-model="passwordConfirm" placeholder="Повторите пароль">
 
@@ -25,21 +26,22 @@
       login: '',
       password: '',
       email: '',
+      contact_telegram: '',
 
       passwordConfirm: ''
     }),
     computed: {
-      starFlag(){ return this.password != this.passwordConfirm || this.password == ''},
+      starFlag(){ return this.password != this.passwordConfirm || this.password == '' || this.contact_telegram == ''},
     },
     methods: {
       onRegistr(){
         if(this.starFlag){
-          this.$notify.error({ title: 'Ошибка', message: 'Пароли не совпадают', customClass: 'messages-ui' });
+          this.$notify.error({ title: 'Ошибка', message: 'Заполните все обязательные поля', customClass: 'messages-ui' });
           return;
         }
 
-        const {login, password, email} = this;
-        this.userRegistr({login, password, email}).then(() => {
+        const {login, password, email, contact_telegram} = this;
+        this.userRegistr({login, password, email, contact_telegram}).then(() => {
           this.$router.go();
         });
       },

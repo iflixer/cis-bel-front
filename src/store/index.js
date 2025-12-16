@@ -108,6 +108,8 @@ const store = new Vuex.Store({
             commit('setStatus', '');
             commit('setName', '');
             dispatch('safeNavigate', {name: 'Authorization'});
+            reject(error);
+            return;
           }
           Notification({ type: 'error', title: 'Ошибка', message: error.message || error, customClass: 'messages-ui' });
           reject(error);

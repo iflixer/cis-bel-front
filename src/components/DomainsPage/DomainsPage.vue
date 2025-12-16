@@ -75,6 +75,12 @@
                   </el-table-column>
 
                   <el-table-column
+                    prop="user_telegram"
+                    label="Telegram"
+                    width="150">
+                  </el-table-column>
+
+                  <el-table-column
                     prop="domain_type_name"
                     label="Тип домена"
                     width="200"
@@ -250,11 +256,6 @@
           if (response && response.domain_type_name !== undefined) {
             row.domain_type_name = response.domain_type_name;
           }
-
-          this.$message({
-            type: 'success',
-            message: 'Тип домена успешно обновлен'
-          });
         } catch (error) {
           console.error('Error updating domain type:', error);
           this.$message({

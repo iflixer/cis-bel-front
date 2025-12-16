@@ -122,6 +122,10 @@
                       label="Ключ">
                     </el-table-column>
                     <el-table-column
+                      prop="contact_telegram"
+                      label="Telegram">
+                    </el-table-column>
+                    <el-table-column
                       prop="score"
                       label="Баланс"
                       width="75">

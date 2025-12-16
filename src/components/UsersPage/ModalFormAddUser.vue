@@ -48,6 +48,10 @@
             <label for="" class="element-form__label">Фамилия</label>
             <el-input v-model="newUser.surname" clearable></el-input>
           </div>
+          <div class="element-form" :class="{ 'element-form--error': validList[3].error }">
+            <label for="" class="element-form__label">Telegram <span class="element-form__label-req">*</span></label>
+            <el-input v-model="newUser.contact_telegram" clearable></el-input>
+          </div>
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
@@ -71,13 +75,15 @@
         tupe: 'client',
         email: '',
         name: '',
-        endname: ''
+        endname: '',
+        contact_telegram: ''
       },
 
       validList: [
         { item: 'login', error: false, text: 'Незаполнен логин' },
         { item: 'password', error: false, text: 'Незаполнен пароль' },
-        { item: 'email', error: false, text: 'Незаполнен email' }
+        { item: 'email', error: false, text: 'Незаполнен email' },
+        { item: 'contact_telegram', error: false, text: 'Не указан Telegram' }
       ],
       errorList: []
 

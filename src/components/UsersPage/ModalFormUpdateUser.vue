@@ -51,8 +51,12 @@
             <label for="" class="element-form__label">Фамилия</label>
             <el-input v-model="updateUser.surname" clearable></el-input>
           </div>
+          <div class="element-form" :class="{ 'element-form--error': validList[2].error }">
+            <label for="" class="element-form__label">Telegram <span class="element-form__label-req">*</span></label>
+            <el-input v-model="updateUser.contact_telegram" clearable></el-input>
+          </div>
 
-          
+
           <p class="element-form__info">Не заполняйте поле пароля, если не хотите его изменять</p>
           
         </el-col>
@@ -76,7 +80,8 @@
 
       validList: [
         { item: 'login', error: false, text: 'Незаполнен логин' },
-        { item: 'email', error: false, text: 'Незаполнен email' }
+        { item: 'email', error: false, text: 'Незаполнен email' },
+        { item: 'contact_telegram', error: false, text: 'Не указан Telegram' }
       ],
       errorList: []
     }},
