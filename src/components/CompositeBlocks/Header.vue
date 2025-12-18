@@ -7,8 +7,16 @@
 
       <h2 class="header__title">FlixCDN</h2>
       <ul class="header__menu">
+        <li class="header__item header__item--support">
+          <a class="header__item-name" href="https://t.me/flixcd_support_bot" target="_blank" rel="noopener" title="Бот поддержки">
+            <span>Поддержка</span>
+          </a>
+          <a class="header__item-name" href="https://t.me/flix_talks" target="_blank" rel="noopener" title="Канал объявлений">
+            <span>Новости</span>
+          </a>
+        </li>
         <li class="header__item">
-          <a 
+          <a
             class="el-button el-button--default order-movie"
             href="#"
             title="Кабинет"
@@ -131,7 +139,11 @@
     }
     .header__item{
       padding: 0 0 0 30px;
-      
+
+    }
+    .header__item--support{
+      display: flex;
+      gap: 15px;
     }
     .header__item-name{
       color: #bcbcbc;

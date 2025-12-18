@@ -13,6 +13,11 @@
       <button :class="{dis: starFlag}" v-on:click="onRegistr()">Зарегистрироваться</button>
 
       <a href="/login">Войти</a>
+
+      <div class="support-links">
+        <a href="https://t.me/flixcd_support_bot" target="_blank" rel="noopener">Поддержка</a>
+        <a href="https://t.me/flix_talks" target="_blank" rel="noopener">Новости</a>
+      </div>
     </div>
   </div>
 </template>
@@ -55,4 +60,23 @@
 
 <style lang='scss' scoped>
   @import "~/assets/scss/LoginForm";
+
+  .support-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+
+    a {
+      color: #6cdaaa;
+      text-decoration: none;
+      font-size: 14px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 </style>

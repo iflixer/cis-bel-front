@@ -126,9 +126,11 @@
                       label="Telegram">
                     </el-table-column>
                     <el-table-column
-                      prop="score"
                       label="Баланс"
                       width="75">
+                      <template slot-scope="scope">
+                        {{ (scope.row.score / 100).toFixed(2) }}
+                      </template>
                     </el-table-column>
                     <el-table-column
                       label=""
