@@ -13,7 +13,7 @@ ENV PYTHON=/usr/bin/python2
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --include=dev
+RUN npm ci --include=dev --omit=dev
 
 COPY . .
 
