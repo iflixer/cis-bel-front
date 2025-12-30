@@ -60,7 +60,7 @@
                           <div class="tikets-s__item-prev-message">
                             {{ value.message.name }}: {{ value.message.message }}
                           </div>
-                          <div class="tikets-s__item-date">{{ value.message.created_at }}</div>
+                          <div class="tikets-s__item-date">{{ value.created_at }}</div>
                         </div>
                         <div v-if="tiketsList && tiketsList.length == 0" style="text-align:center">Данных нет</div>
                         
@@ -220,8 +220,8 @@
           tupe: type
         }).then( response => {
           this.tiketsList = response.map(el => {
-            if(el.message && el.message.created_at) {
-              el.message.created_at = this.getDataS(el.message.created_at);
+            if(el.created_at) {
+              el.created_at = this.getDataS(el.created_at);
             }
             return el;
           });
