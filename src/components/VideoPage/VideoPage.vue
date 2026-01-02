@@ -97,7 +97,8 @@
                   :data="videos"
                   :row-key="row => row.id"
                   stripe
-                  style="width: 100%">
+                  style="width: 100%"
+                  v-loading="loading">
 
                   <el-table-column
                     v-if="isRight"
@@ -286,6 +287,7 @@
     },
     props: ['type'],
     data(){return{
+      loading: false,
 
       videoInfoFlag: false, // Модалка с информацией о фильме
       updateFilmData: null, // данные для модалки, режим редактирования
@@ -465,7 +467,8 @@
           search: this.search,
           ...this.filter
         };
-        
+
+        this.loading = true;
         this.postMethod('getVideo', params).then((response) => {
           this.count = response.count;
           this.videos = response.items.map(item => {
@@ -476,6 +479,8 @@
           this.videoData = response;
 
           // this.$refs.articles__scrol.scrollTop = 0;
+        }).finally(() => {
+          this.loading = false;
         });
       },
       isTrOpen(id) {

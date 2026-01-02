@@ -34,6 +34,7 @@
                     :data="tagsList"
                     stripe
                     style="width: 100%"
+                    v-loading="loading"
                     @selection-change="handleSelectionChange">
                     <el-table-column
                       type="selection"
@@ -96,6 +97,7 @@
       'modal-update-tag': updateTag
     },
     data: function(){return{
+      loading: false,
       tagsList: [],
       addTagShow: false,
       updateTagShow: false,
@@ -111,6 +113,7 @@
     methods: {
 
       getTags: function(){
+        this.loading = true;
         this.postMethod('domaintags.get', {})
         .then(response => {
           this.tagsList = response;
@@ -118,6 +121,9 @@
         })
         .catch(error => {
           console.log(error);
+        })
+        .finally(() => {
+          this.loading = false;
         });
       },
 

@@ -36,6 +36,7 @@
                   :data="data"
                   stripe
                   style="width: 100%"
+                  v-loading="loading"
                   @selection-change="handleSelectionChange">
 
                   <el-table-column
@@ -141,6 +142,7 @@
     },
 
     data: () => ({
+      loading: false,
       addAdsVisible: false,
       updateAdsVisible: false,
       setingsAdsVisible: false,
@@ -162,9 +164,12 @@
     methods: {
 
       getData(){
+        this.loading = true;
         this.postMethod('ads.get', {})
         .then((response) => {
           this.data = response;
+        }).finally(() => {
+          this.loading = false;
         });
       },
 
