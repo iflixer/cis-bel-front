@@ -139,7 +139,7 @@
         }
 
         let gtc = this.telegramQuery.replace('@', '');
-        let link = `https://tg.cdnhubstream.pro/share/${this.videoId}?tgc=${gtc}`;
+        let link = `https://tg.flixcdn.space/share/${this.videoId}?tgc=${gtc}`;
         // console.log(link);
 
         this.$copyText(link).then((e) => {
