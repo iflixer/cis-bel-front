@@ -36,7 +36,8 @@
                 <el-table
                   :data="videos"
                   stripe
-                  style="width: 100%">
+                  style="width: 100%"
+                  v-loading="loading">
 
                   <el-table-column
                     type="selection"
@@ -121,6 +122,7 @@
     },
     props: ['type'],
     data(){return{
+      loading: false,
 
       videoInfoFlag: false, // Модалка с информацией о фильме
       updateFilmData: null, // данные для модалки, режим редактирования
@@ -258,7 +260,8 @@
           offset: this.offsetPage,
           search: this.search
         };
-        
+
+        this.loading = true;
         this.postMethod('translations.search', params).then((response) => {
           this.count = response.count;
           this.videos = response.items.map(item => {
@@ -269,6 +272,8 @@
           this.videoData = response;
 
           // this.$refs.articles__scrol.scrollTop = 0;
+        }).finally(() => {
+          this.loading = false;
         });
       },
 

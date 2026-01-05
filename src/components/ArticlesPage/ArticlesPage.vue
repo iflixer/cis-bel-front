@@ -31,6 +31,7 @@
                   :data="data"
                   stripe
                   style="width: 100%"
+                  v-loading="loading"
                   @selection-change="handleSelectionChange">
 
                   <el-table-column
@@ -91,6 +92,7 @@
     },
 
     data: () => ({
+      loading: false,
       data: null,
       articleFlag: false,
       idArticle: null,
@@ -104,8 +106,11 @@
     methods: {
 
       getArtikles(){
+        this.loading = true;
         this.postMethod('articles.get').then((response) => {
           this.data = response;
+        }).finally(() => {
+          this.loading = false;
         });
       },
 

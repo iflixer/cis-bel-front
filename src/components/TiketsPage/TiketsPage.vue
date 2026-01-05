@@ -44,7 +44,7 @@
                 <el-col :span="18">
                   <div class="section__content">
 
-                    <div v-if="!tiketShow" class="tikets-s">
+                    <div v-if="!tiketShow" class="tikets-s" v-loading="loading">
                       <div class="tikets-s__content">
 
                         <div 
@@ -175,6 +175,7 @@
     },
 
     data: function(){return{
+      loading: false,
 
       tiketFlag: false,
       tiketType: '',
@@ -215,6 +216,7 @@
 
       getTikets: function(type){
         this.typeTikets = type;
+        this.loading = true;
         this.postMethod('tikets.get', {
           close: this.pageTikets,
           tupe: type
@@ -225,6 +227,8 @@
             }
             return el;
           });
+        }).finally(() => {
+          this.loading = false;
         });
       },
 

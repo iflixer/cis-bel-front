@@ -10,7 +10,7 @@
 
             <slot name="messages"></slot>
 
-            <div class="player-list" v-if="!updatePlayer">
+            <div class="player-list" v-if="!updatePlayer" v-loading="loading">
 
               <section class="section">
                 <div>
@@ -205,6 +205,7 @@
     },
 
     data: function(){return{
+      loading: false,
 
       listTest: [
         {
@@ -260,13 +261,16 @@
 
       getList(){
         // Запрос к api
+        this.loading = true;
         this.postMethod('domains.get')
         .then(response => {
-          response = response.map(function(el){ 
+          response = response.map(function(el){
             el.new_player = JSON.parse(el.new_player);
-            return el; 
+            return el;
           });
           this.list = response;
+        }).finally(() => {
+          this.loading = false;
         });
       },
 

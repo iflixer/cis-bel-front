@@ -52,6 +52,7 @@
                   :data="domainsList"
                   stripe
                   style="width: 100%"
+                  v-loading="loading"
                   @sort-change="handleSortChange">
 
                   <el-table-column
@@ -155,6 +156,7 @@
     name: 'DomainsPage',
     props: ['data'],
     data(){return{
+      loading: false,
       domainsList: [],
       count: 0,
       searchUser: '',
@@ -238,9 +240,12 @@
           order_direction: this.orderDirection
         };
 
+        this.loading = true;
         this.postMethod('domains.getAll', params).then((response) => {
           this.count = response.count;
           this.domainsList = response.items;
+        }).finally(() => {
+          this.loading = false;
         });
       },
 

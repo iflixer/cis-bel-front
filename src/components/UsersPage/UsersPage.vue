@@ -89,6 +89,7 @@
                     :data="usersList"
                     stripe
                     style="width: 100%"
+                    v-loading="loading"
                     @selection-change="handleSelectionChange">
                     <el-table-column
                       type="selection"
@@ -169,6 +170,7 @@
       'modal-update-user': updateUser
     },
     data: function(){return{
+      loading: false,
       usersList: null,
       pageUsers: 'users',
       addUserShow: false,
@@ -197,12 +199,15 @@
       },
 
       getUsers: function(type){
+        this.loading = true;
         this.postMethod('users.get', {
           page: this.pageUsers,
           tupe: type
         }).then(response => {
           this.usersList = response;
-        })
+        }).finally(() => {
+          this.loading = false;
+        });
       },
 
       updateUser(index){
