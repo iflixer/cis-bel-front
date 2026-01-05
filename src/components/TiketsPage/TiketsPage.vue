@@ -33,6 +33,24 @@
                       <div class="form__menu-item" :class="{ active: typeTikets == 'film' }" v-on:click="getTikets('film')">Фильмы</div>
                       <div class="form__menu-item" :class="{ active: typeTikets == 'cent' }" v-on:click="getTikets('cent')">Вывод средств</div>
 
+                      <template v-if="isRight">
+                        <el-divider content-position="left">Фильтр по пользователю</el-divider>
+                        <el-select
+                          v-model="selectedUser"
+                          placeholder="Все пользователи"
+                          clearable
+                          filterable
+                          @change="getTikets(typeTikets)"
+                          style="width: 100%">
+                          <el-option
+                            v-for="user in usersList"
+                            :key="user.id"
+                            :label="user.label"
+                            :value="user.id">
+                          </el-option>
+                        </el-select>
+                      </template>
+
                       <el-divider content-position="left">Действия</el-divider>
                       <!-- <div class="form__button" v-on:click="openForm('film')">Заказать фильм</div> -->
                       <div class="form__button" v-on:click="openForm('tiket')">Создать тикет</div>
@@ -123,20 +141,24 @@
 
                         </div>
 
-                        <div class="tikets-s__mes-item" v-for="(value, index) in tiketMessages" :key="index">
+                        <div
+                          class="tikets-s__mes-item"
+                          :class="{ 'tikets-s__mes-item--user': value.name === 'Вы', 'tikets-s__mes-item--admin': value.name !== 'Вы' }"
+                          v-for="(value, index) in tiketMessages"
+                          :key="index">
                           <span class="tikets-s__mes-item-name">{{ value.name }}</span>
                           <span class="tikets-s__item-tupe">{{ value.created_at }}</span>
                           <div>{{ value.message }}</div>
                         </div>
-                        <div v-if="tiketsList[tiketIndex].status != 4">
-                          <textarea 
-                            class="tikets-s__input" 
-                            cols="30" 
+                        <div v-if="tiketsList[tiketIndex].status != 4" class="tikets-s__send-form">
+                          <textarea
+                            class="tikets-s__input"
+                            cols="30"
                             rows="10"
-                            placeholder="Сообщение" 
+                            placeholder="Сообщение"
                             v-model="textMessage">
                           </textarea>
-                          <button class="button tikets-s__button-l" v-on:click="sendMessage()">Отправить</button>
+                          <button class="button" v-on:click="sendMessage()">Отправить</button>
                         </div>
                       </div>
                     </div>
@@ -191,7 +213,10 @@
       pageTikets: false,
       typeTikets: 'tiket',
 
-      dataTiket: null
+      dataTiket: null,
+
+      usersList: [],
+      selectedUser: null
 
     }},
 
@@ -211,16 +236,28 @@
       ]),
 
       init: function(){
+        this.loadUsersList();
         this.getTikets('tiket');
+      },
+
+      loadUsersList: function(){
+        if (!this.isRight) return;
+        this.postMethod('tikets.getUsers', {}).then(response => {
+          this.usersList = response;
+        });
       },
 
       getTikets: function(type){
         this.typeTikets = type;
         this.loading = true;
-        this.postMethod('tikets.get', {
+        let params = {
           close: this.pageTikets,
           tupe: type
-        }).then( response => {
+        };
+        if (this.selectedUser) {
+          params.id_user = this.selectedUser;
+        }
+        this.postMethod('tikets.get', params).then( response => {
           this.tiketsList = response.map(el => {
             if(el.created_at) {
               el.created_at = this.getDataS(el.created_at);
@@ -397,6 +434,8 @@
   .tikets-s__panel{
       overflow: hidden;
       padding: 10px 0;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
   }
   .tikets-s__panel--center{
       text-align: center;
@@ -487,11 +526,31 @@
   }
 
   .tikets-s__mes-item{
-      padding: 15px 0;
-      margin: 5px 0;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 4px;
   }
   .tikets-s__mes-item-name{
       font-size: 16px;
       font-family: 'Montserrat-Medium';
+  }
+
+  .tikets-s__mes-item--user {
+      background-color: #e3f2fd;
+      border-left: 3px solid #2196f3;
+  }
+
+  .tikets-s__mes-item--admin {
+      background-color: #f5f5f5;
+      border-left: 3px solid #40c173;
+  }
+
+  .tikets-s__messages {
+      margin-top: 20px;
+  }
+
+  .tikets-s__send-form {
+      overflow: hidden;
+      margin-top: 15px;
   }
 </style>
