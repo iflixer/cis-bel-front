@@ -168,6 +168,13 @@
                             icon="el-icon-refresh">
                             {{ loading ? 'Загрузка...' : 'Обновить' }}
                           </el-button>
+                          <el-button
+                            type="success"
+                            @click="exportCsv"
+                            :loading="exporting"
+                            icon="el-icon-download">
+                            {{ exporting ? 'Экспорт...' : 'Экспорт CSV' }}
+                          </el-button>
                         </div>
                       </div>
 
@@ -544,6 +551,7 @@ export default {
   },
   data: () => ({
     loading: false,
+    exporting: false,
 
     selectedUser: null,
     selectedDomain: null,
@@ -850,6 +858,61 @@ export default {
         });
       } finally {
         this.loading = false;
+      }
+    },
+
+    async exportCsv() {
+      this.exporting = true;
+      try {
+        const params = {
+          period: this.selectedPeriod ? this.selectedPeriod.value : 'yesterday'
+        };
+
+        if (this.selectedUser && this.selectedUser.id !== 'all') {
+          params.user_id = this.selectedUser.id;
+        }
+        if (this.selectedDomain && this.selectedDomain.id !== 'all') {
+          params.domain_id = this.selectedDomain.id;
+        }
+        if (this.selectedGeoGroup && this.selectedGeoGroup.id !== 'all') {
+          params.geo_group_id = this.selectedGeoGroup.id;
+        }
+        if (this.selectedPeriod && this.selectedPeriod.value === 'custom' && this.customDateRange) {
+          params.custom_range = JSON.stringify({
+            start: this.customDateRange[0],
+            end: this.customDateRange[1]
+          });
+        }
+
+        const token = this.$store.state.user.token;
+        const queryString = new URLSearchParams(params).toString();
+
+        const response = await fetch(`/api/front/adminpaystats.exportcsv?${queryString}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Export failed');
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+
+        const cd = response.headers.get('Content-Disposition');
+        const match = cd ? cd.match(/filename="?([^"]+)"?/) : null;
+        link.download = match ? match[1] : 'event_stats.csv';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        this.$message({ message: 'Экспорт завершен', type: 'success' });
+      } catch (error) {
+        console.error('Export error:', error);
+        this.$message({ message: 'Ошибка при экспорте данных', type: 'error' });
+      } finally {
+        this.exporting = false;
       }
     },
 
