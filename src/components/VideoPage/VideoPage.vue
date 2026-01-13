@@ -125,7 +125,7 @@
                       <!-- <i class="el-icon-video-camera"></i> -->
                       <!-- <i class="el-icon-film"></i> -->
                       <div class="tag tag-border tag--icon" v-if="scope.row.tupe == 'movie'" title="фильм">Fi</div>
-                      <div class="tag tag-border tag--icon" v-if="scope.row.tupe == 'cartoon'" title="мультфильм">Mu</div>
+                      <div class="tag tag-border tag--icon" v-else-if="scope.row.tupe == 'cartoon'" title="мультфильм">Mu</div>
                       <div class="tag tag-border tag--icon" v-else title="сериал">Se</div>
                     
                     </template>
