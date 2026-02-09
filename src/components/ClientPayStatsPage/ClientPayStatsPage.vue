@@ -51,6 +51,12 @@
                               icon="el-icon-refresh">
                             {{ loading ? 'Загрузка...' : 'Обновить' }}
                           </el-button>
+                          <el-button
+                              type="success"
+                              @click="liveStatsVisible = true"
+                              icon="el-icon-data-line">
+                            Live
+                          </el-button>
                         </div>
                       </div>
 
@@ -173,15 +179,19 @@
         </main>
       </div>
     </div>
+    <LiveStatsModal :visible="liveStatsVisible" @close="liveStatsVisible = false" />
   </div>
 </template>
 
 <script>
+import LiveStatsModal from './LiveStatsModal.vue';
+
 export default {
   name: "ClientPayStatsPage",
-  components: {},
+  components: { LiveStatsModal },
   data: () => ({
     loading: false,
+    liveStatsVisible: false,
 
     selectedPeriod: null,
     customDateRange: null,
