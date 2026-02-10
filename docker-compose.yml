@@ -7,7 +7,7 @@ services:
       target: production
     container_name: kolobok_frontend_app
     ports:
-      - "${APP_PORT:-8039}:80"
+      - "${APP_PORT:-8080}:80"
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - BUILD_OUTPUT_DIR=${BUILD_OUTPUT_DIR:-kholobok.biz}
